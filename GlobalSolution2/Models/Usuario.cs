@@ -32,5 +32,8 @@ public class Usuario
     [Column("NIVEL_EXPERIENCIA")]
     [StringLength(50)]
     public required string NivelExperiencia { get; set; }
+
+    public ICollection<UsuarioCompetencia> UsuarioCompetencias { get; set; } = new List<UsuarioCompetencia>();
+
 }
     
