@@ -35,5 +35,10 @@ public class Usuario
 
     public ICollection<UsuarioCompetencia> UsuarioCompetencias { get; set; } = new List<UsuarioCompetencia>();
 
+    // Relação com Recomendacoes
+    public ICollection<Recomendacao> Recomendacoes { get; set; } = new List<Recomendacao>();
+
+    // Relação com Registros de Bem-Estar
+    public ICollection<RegistroBemEstar> RegistrosBemEstar { get; set; } = new List<RegistroBemEstar>();
 }
     

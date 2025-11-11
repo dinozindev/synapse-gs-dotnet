@@ -30,4 +30,8 @@ namespace GlobalSolution2.Models;
 
         [JsonIgnore]
         public required Usuario Usuario { get; set; }   
+            
+        // Relações para detalhes
+        public RecomendacaoProfissional? RecomendacaoProfissional { get; set; }
+        public RecomendacaoSaude? RecomendacaoSaude { get; set; }
     }

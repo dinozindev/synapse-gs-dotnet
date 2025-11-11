@@ -4,10 +4,33 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+        <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2"/>
+    <PackageReference Include="Asp.Versioning.Http" Version="7.1.0" />
+      <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+      <PackageReference Include="AspNetCore.HealthChecks.Oracle" Version="9.0.0" />
+      <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+      <PackageReference Include="DotNetEnv" Version="3.1.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.3" />
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.3" />
+      <PackageReference Include="Microsoft.ML" Version="4.0.2" />
+      <PackageReference Include="Microsoft.ML.FastTree" Version="4.0.2" />
+      <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.80" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.4" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="9.0.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
     </ItemGroup>
 
 </Project>
