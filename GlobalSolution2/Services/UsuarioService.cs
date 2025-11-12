@@ -156,15 +156,15 @@ public class UsuarioService
     // adicionar associação com Competencia
     public async Task<IResult> AddCompetenciaAoUsuarioAsync(int usuarioId, int competenciaId)
     {
-        var usuarioExistente = await _db.Usuarios.FindAsync(usuarioId);
-        var competenciaExistente = await _db.Competencias.FindAsync(competenciaId);
+        var usuarioExistente = await _db.Usuarios.Where(u => u.UsuarioId == usuarioId).FirstOrDefaultAsync();
+        var competenciaExistente = await _db.Competencias.Where(c => c.CompetenciaId == competenciaId).FirstOrDefaultAsync();
 
-        if (usuarioExistente == null || competenciaExistente == null) return Results.NotFound("Usuário e Competência inexistentes.");
+        if (usuarioExistente is null || competenciaExistente is null) return Results.NotFound("Usuário e Competência inexistentes.");
 
         var existeAssociacao = await _db.UsuarioCompetencias
-        .AnyAsync(uc => uc.UsuarioId == usuarioId && uc.CompetenciaId == competenciaId);
+        .Where(uc => uc.UsuarioId == usuarioId && uc.CompetenciaId == competenciaId).FirstOrDefaultAsync();
 
-        if (existeAssociacao) return Results.Conflict("A associação entre Usuário e Competência já existe.");
+        if (existeAssociacao is not null) return Results.Conflict("A associação entre Usuário e Competência já existe.");
 
         var usuarioCompetencia = new UsuarioCompetencia
         {
@@ -184,7 +184,7 @@ public class UsuarioService
         var usuarioCompetencia = await _db.UsuarioCompetencias
         .FirstOrDefaultAsync(uc => uc.UsuarioId == usuarioId && uc.CompetenciaId == competenciaId);
 
-        if (usuarioCompetencia == null) return Results.NotFound("Associação entre Usuário e Competência não encontrada.");
+        if (usuarioCompetencia is null) return Results.NotFound("Associação entre Usuário e Competência não encontrada.");
 
         _db.UsuarioCompetencias.Remove(usuarioCompetencia);
         await _db.SaveChangesAsync();
@@ -226,13 +226,15 @@ public class UsuarioService
                 );
             }
 
-        // verifica se o nome de usuário já existe
-        var nomeExistente = await _db.Usuarios
-            .Where(u => u.NomeUsuario == dto.NomeUsuario
-                        && (!ignoreId.HasValue || u.UsuarioId != ignoreId.Value))
-            .AnyAsync();
+        // verifica se o nome de usuário já existe em outro registro
+        var query = _db.Usuarios.Where(u => u.NomeUsuario == dto.NomeUsuario);
 
-        if (nomeExistente)
+        if (ignoreId.HasValue)
+            query = query.Where(u => u.UsuarioId != ignoreId.Value);
+
+        var usuarioExistente = await query.FirstOrDefaultAsync();
+
+        if (usuarioExistente is not null)
             return Results.Conflict("Já existe um usuário com esse nome de login.");
 
         return null; 

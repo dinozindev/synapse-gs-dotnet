@@ -674,6 +674,9 @@
           }
         }
       },
+      "Microsoft.EntityFrameworkCore.Tools/10.0.0": {
+        "type": "package"
+      },
       "Microsoft.Extensions.ApiDescription.Server/9.0.0": {
         "type": "package",
         "build": {
@@ -4522,6 +4525,31 @@
         "lib/net8.0/Microsoft.EntityFrameworkCore.Relational.xml",
         "microsoft.entityframeworkcore.relational.9.0.3.nupkg.sha512",
         "microsoft.entityframeworkcore.relational.nuspec"
+      ]
+    },
+    "Microsoft.EntityFrameworkCore.Tools/10.0.0": {
+      "sha512": "Gx6AWCf1CsBHTbvVVWBYBKp6hrwZt0IgBigoBPaybwOBG2EFIfZc7NP2BoR6r56YuuikbPIzCuvQuFYNnX43+A==",
+      "type": "package",
+      "path": "microsoft.entityframeworkcore.tools/10.0.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "docs/PACKAGE.md",
+        "microsoft.entityframeworkcore.tools.10.0.0.nupkg.sha512",
+        "microsoft.entityframeworkcore.tools.nuspec",
+        "tools/EntityFrameworkCore.PS2.psd1",
+        "tools/EntityFrameworkCore.PS2.psm1",
+        "tools/EntityFrameworkCore.psd1",
+        "tools/EntityFrameworkCore.psm1",
+        "tools/about_EntityFrameworkCore.help.txt",
+        "tools/init.ps1",
+        "tools/net10.0/any/ef.dll",
+        "tools/net10.0/any/ef.runtimeconfig.json",
+        "tools/net472/any/ef.exe",
+        "tools/net472/win-arm64/ef.exe",
+        "tools/net472/win-x86/ef.exe"
       ]
     },
     "Microsoft.Extensions.ApiDescription.Server/9.0.0": {
@@ -9775,6 +9803,7 @@
       "Microsoft.EntityFrameworkCore >= 9.0.3",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.3",
       "Microsoft.EntityFrameworkCore.InMemory >= 9.0.3",
+      "Microsoft.EntityFrameworkCore.Tools >= 10.0.0",
       "Microsoft.ML >= 4.0.2",
       "Microsoft.ML.FastTree >= 4.0.2",
       "Oracle.EntityFrameworkCore >= 9.23.80",
@@ -9879,6 +9908,12 @@
           "Microsoft.EntityFrameworkCore.InMemory": {
             "target": "Package",
             "version": "[9.0.3, )"
+          },
+          "Microsoft.EntityFrameworkCore.Tools": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[10.0.0, )"
           },
           "Microsoft.ML": {
             "target": "Package",

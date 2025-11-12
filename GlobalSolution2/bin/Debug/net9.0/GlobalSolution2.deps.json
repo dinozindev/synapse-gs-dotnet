@@ -49,6 +49,7 @@
           "Microsoft.EntityFrameworkCore": "9.0.3",
           "Microsoft.EntityFrameworkCore.Design": "9.0.3",
           "Microsoft.EntityFrameworkCore.InMemory": "9.0.3",
+          "Microsoft.EntityFrameworkCore.Tools": "10.0.0",
           "Microsoft.ML": "4.0.2",
           "Microsoft.ML.FastTree": "4.0.2",
           "Oracle.EntityFrameworkCore": "9.23.80",
@@ -917,6 +918,7 @@
           "lib/net8.0/Microsoft.EntityFrameworkCore.Relational.dll": {}
         }
       },
+      "Microsoft.EntityFrameworkCore.Tools/10.0.0": {},
       "Microsoft.Extensions.ApiDescription.Server/9.0.0": {},
       "Microsoft.Extensions.Caching.Abstractions/9.0.3": {
         "dependencies": {
@@ -4376,6 +4378,13 @@
       "sha512": "sha512-xsS+5TM7M5f3tCSRaSbzouGCoIgD2zokQxBGXvf9z3DusRztWvT1NNT9XJaY2JoK1qEEDcHah8is6azYmpZhIg==",
       "path": "microsoft.entityframeworkcore.relational/9.0.3",
       "hashPath": "microsoft.entityframeworkcore.relational.9.0.3.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Tools/10.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Gx6AWCf1CsBHTbvVVWBYBKp6hrwZt0IgBigoBPaybwOBG2EFIfZc7NP2BoR6r56YuuikbPIzCuvQuFYNnX43+A==",
+      "path": "microsoft.entityframeworkcore.tools/10.0.0",
+      "hashPath": "microsoft.entityframeworkcore.tools.10.0.0.nupkg.sha512"
     },
     "Microsoft.Extensions.ApiDescription.Server/9.0.0": {
       "type": "package",

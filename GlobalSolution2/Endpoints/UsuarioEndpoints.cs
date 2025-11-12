@@ -30,7 +30,7 @@ public static class UsuarioEndpoints
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError);
 
-        usuarios.MapPost("/{id:int}", async (UsuarioPostDto dto, UsuarioService service) => await service.CreateUsuarioAsync(dto))
+        usuarios.MapPost("/", async (UsuarioPostDto dto, UsuarioService service) => await service.CreateUsuarioAsync(dto))
         .Accepts<UsuarioPostDto>("application/json")
         .WithSummary("Cria um Usuário (V1)")
         .WithDescription("Este endpoint cria um usuário a partir do nome, senha, área atual, área de interesse, objetivo de carreira e nível de experiência. Retorna 201 Created se o usuário for criado com sucesso, ou erro caso não seja possível.")
@@ -95,7 +95,7 @@ public static class UsuarioEndpoints
         .Produces(StatusCodes.Status500InternalServerError)
         .RequireAuthorization();
 
-        usuarios.MapPost("/{id:int}", async (UsuarioPostDto dto, UsuarioService service) => await service.CreateUsuarioAsync(dto))
+        usuarios.MapPost("/", async (UsuarioPostDto dto, UsuarioService service) => await service.CreateUsuarioAsync(dto))
         .Accepts<UsuarioPostDto>("application/json")
         .WithSummary("Cria um Usuário (V2)")
         .WithDescription("Este endpoint cria um usuário a partir do nome, senha, área atual, área de interesse, objetivo de carreira e nível de experiência. Retorna 201 Created se o usuário for criado com sucesso, ou erro caso não seja possível.")

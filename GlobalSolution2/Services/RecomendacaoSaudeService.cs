@@ -26,9 +26,9 @@ public class RecomendacaoSaudeService
 
         if (!recomendacoes.Any()) return Results.NoContent();
 
-        var recomendacoesDto = recomendacoes.Select(RecomendacaoSaudeReadDto.ToDto).ToList();
+        var recomendacoesDto = recomendacoes.Select(RecomendacaoSaudeResumoDto.ToDto).ToList();
 
-        var response = new PagedResponse<RecomendacaoSaudeReadDto>(
+        var response = new PagedResponse<RecomendacaoSaudeResumoDto>(
             TotalCount: totalCount,
             PageNumber: pageNumber,
             PageSize: pageSize,
@@ -148,6 +148,16 @@ public class RecomendacaoSaudeService
         );
 
         return Results.Created($"/recomendacoes-saude/{recomendacao.RecomendacaoId}", response);
+    }
+
+    public async Task<IResult> DeleteRecomendacaoSaudeAsync(int id) 
+    {
+        var recomendacao = await _db.RecomendacoesSaude.FindAsync(id);
+        if (recomendacao is null) return Results.NotFound("Recomendação de Saúde não encontrada com ID informado.");
+
+        _db.RecomendacoesSaude.Remove(recomendacao);
+        await _db.SaveChangesAsync();
+        return Results.NoContent();
     }
 
     private async Task<IResult?> ValidateRecomendacaoSaude(RecomendacaoSaudePostDto dto)

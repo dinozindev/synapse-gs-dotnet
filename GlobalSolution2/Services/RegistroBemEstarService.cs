@@ -46,8 +46,8 @@ public class RegistroBemEstarService
 
     public async Task<IResult> GetRegistrosDeUsuarioAsync(int usuarioId, int pageNumber = 1, int pageSize = 10)
     {
-        var usuarioExiste = await _db.Usuarios.AnyAsync(u => u.UsuarioId == usuarioId);
-        if (!usuarioExiste) return Results.NotFound($"Nenhum usuário encontrado com o ID {usuarioId}.");
+        var usuarioExiste = await _db.Usuarios.Where(u => u.UsuarioId == usuarioId).FirstOrDefaultAsync();
+        if (usuarioExiste is null) return Results.NotFound($"Nenhum usuário encontrado com o ID {usuarioId}.");
 
         var totalCount = await _db.RegistrosBemEstar
             .Where(r => r.UsuarioId == usuarioId)
@@ -55,7 +55,6 @@ public class RegistroBemEstarService
 
         var registros = await _db.RegistrosBemEstar
             .Where(r => r.UsuarioId == usuarioId)
-            .Include(r => r.Usuario)
             .OrderByDescending(r => r.DataRegistro)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -143,7 +142,9 @@ public class RegistroBemEstarService
 
     public async Task<IResult> UpdateRegistroBemEstarAsync(int id, RegistroBemEstarPutDto dto)
     {
-        var registroExistente = await _db.RegistrosBemEstar.FindAsync(id);
+        var registroExistente = await _db.RegistrosBemEstar
+        .Include(r => r.Usuario)
+        .FirstOrDefaultAsync(r => r.RegistroId == id);
         if (registroExistente is null) return Results.NotFound("Registro não encontrado com ID informado.");
 
         var validation = await ValidateRegistroPut(dto);
@@ -182,53 +183,33 @@ public class RegistroBemEstarService
         return Results.NoContent();
     }
 
-    // valida as informações do RegistroBemEstar para POST
-    private async Task<IResult?> ValidateRegistroPost(RegistroBemEstarPostDto dto, int? ignoreId = null)
+    private async Task<IResult?> ValidateRegistroPost(RegistroBemEstarPostDto dto)
     {
-
         var humoresValidos = new[] { "Feliz", "Triste", "Estressado", "Bravo", "Calmo" };
         if (!humoresValidos.Contains(dto.HumorRegistro))
-        {
             return Results.BadRequest("Humor inválido. Valores aceitos: Feliz, Triste, Estressado, Bravo ou Calmo.");
-        }
-
-        if (dto.DataRegistro > DateTime.Now)
-        {
-            return Results.BadRequest("A data do registro não pode ser no futuro.");
-        }
 
         if (dto.HorasSono < 0 || dto.HorasSono > 24)
-        {
             return Results.BadRequest("As horas de sono devem estar entre 0 e 24.");
-        }
 
         if (dto.HorasTrabalho < 0 || dto.HorasTrabalho > 24)
-        {
             return Results.BadRequest("As horas de trabalho devem estar entre 0 e 24.");
-        }
 
         if (dto.NivelEnergia < 1 || dto.NivelEnergia > 10)
-        {
             return Results.BadRequest("O nível de energia deve estar entre 1 e 10.");
-        }
 
         if (dto.NivelEstresse < 1 || dto.NivelEstresse > 10)
-        {
             return Results.BadRequest("O nível de estresse deve estar entre 1 e 10.");
-        }
 
-        var registroExistente = await _db.RegistrosBemEstar
-            .AnyAsync(r => r.UsuarioId == dto.UsuarioId &&
-                           r.DataRegistro.Date == dto.DataRegistro.Date &&
-                           (!ignoreId.HasValue || r.RegistroId != ignoreId.Value));
-
-        if (registroExistente)
+        if (!string.IsNullOrWhiteSpace(dto.ObservacaoRegistro) && dto.ObservacaoRegistro.Length > 255)
         {
-            return Results.Conflict("Já existe um registro de bem-estar para esse usuário nesta data.");
+            return Results.BadRequest("O campo 'ObservacaoRegistro' não pode exceder 255 caracteres.");
         }
 
         return null;
     }
+
+
 
     private async Task<IResult?> ValidateRegistroPut(RegistroBemEstarPutDto dto)
     {

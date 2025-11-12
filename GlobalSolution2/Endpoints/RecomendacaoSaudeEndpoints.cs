@@ -32,7 +32,7 @@ public static class RecomendacaoSaudeEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações de saúde de um usuário (V1)")
             .MapToApiVersion(1, 0)
-            .Produces<ResourceResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status200OK)
+            .Produces<ResourceResponse<RecomendacaoSaudeResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError);
@@ -44,6 +44,14 @@ public static class RecomendacaoSaudeEndpoints
             .Accepts<RecomendacaoSaudePostDto>("application/json")
             .Produces<ResourceResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
+        recSaude.MapDelete("/{id:int}", async ([Description("Identificador único de Recomendação")] int id, RecomendacaoSaudeService service) => await service.DeleteRecomendacaoSaudeAsync(id))
+            .WithSummary("Deleta uma recomendação de saúde (V1)")
+            .WithDescription("Este endpoint é responsável por remover uma recomendação de saúde. Retorna 204 No Content se for removida, ou erro caso não seja possível.")
+            .MapToApiVersion(1, 0)
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
         
@@ -72,13 +80,13 @@ public static class RecomendacaoSaudeEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações de saúde de um usuário (V2)")
             .MapToApiVersion(2, 0)
-            .Produces<ResourceResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status200OK)
+            .Produces<ResourceResponse<RecomendacaoSaudeResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError)
             .RequireAuthorization();
-        
+
         recSaude.MapPost("/", async (RecomendacaoSaudePostDto dto, RecomendacaoSaudeService service) => await service.CreateRecomendacaoSaudeAsync(dto))
             .WithSummary("Cria uma recomendação de saúde (V2)")
             .WithDescription("Este endpoint é responsável por criar uma nova recomendação de saúde. Retorna 201 Created caso seja criada, ou erro caso não seja possível.")
@@ -86,6 +94,16 @@ public static class RecomendacaoSaudeEndpoints
             .Accepts<RecomendacaoSaudePostDto>("application/json")
             .Produces<ResourceResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization();
+        
+        recSaude.MapDelete("/{id:int}", async ([Description("Identificador único de Recomendação")] int id, RecomendacaoSaudeService service) => await service.DeleteRecomendacaoSaudeAsync(id))
+            .WithSummary("Deleta uma recomendação de saúde (V2)")
+            .WithDescription("Este endpoint é responsável por remover uma recomendação de saúde. Retorna 204 No Content se for removida, ou erro caso não seja possível.")
+            .MapToApiVersion(2, 0)
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError)

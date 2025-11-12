@@ -88,9 +88,9 @@ public class RecomendacaoProfissionalService
         if (!recomendacoes.Any())
             return Results.NoContent();
 
-        var recomendacoesDto = recomendacoes.Select(RecomendacaoProfissionalReadDto.ToDto).ToList();
+        var recomendacoesDto = recomendacoes.Select(RecomendacaoProfissionalResumoDto.ToDto).ToList();
 
-        var response = new PagedResponse<RecomendacaoProfissionalReadDto>(
+        var response = new PagedResponse<RecomendacaoProfissionalResumoDto>(
             TotalCount: totalCount,
             PageNumber: pageNumber,
             PageSize: pageSize,
@@ -148,6 +148,16 @@ public class RecomendacaoProfissionalService
         );
 
         return Results.Created($"/recomendacoes-profissionais/{recomendacao.RecomendacaoId}", response);
+    }
+
+    public async Task<IResult> DeleteRecomendacaoProfissionalAsync(int id) 
+    {
+        var recomendacao = await _db.RecomendacoesProfissionais.FindAsync(id);
+        if (recomendacao is null) return Results.NotFound("Recomendação Profissional não encontrada com ID informado.");
+
+        _db.RecomendacoesProfissionais.Remove(recomendacao);
+        await _db.SaveChangesAsync();
+        return Results.NoContent();
     }
 
     private async Task<IResult?> ValidateRecomendacaoProfissional(RecomendacaoProfissionalPostDto dto)

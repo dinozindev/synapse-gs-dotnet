@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GlobalSolution2.Models;
 
+[Table("USUARIO_COMPETENCIA")]
 public class UsuarioCompetencia
 {
     [Key]

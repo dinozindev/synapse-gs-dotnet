@@ -33,11 +33,11 @@ public static class RecomendacaoProfissionalEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações profissionais de um usuário (V1)")
             .MapToApiVersion(1, 0)
-            .Produces<ResourceResponse<RecomendacaoProfissionalReadDto>>(StatusCodes.Status200OK)
+            .Produces<ResourceResponse<RecomendacaoProfissionalResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError);
-        
+
         recProfissionais.MapPost("/", async (RecomendacaoProfissionalPostDto dto, RecomendacaoProfissionalService service) => await service.CreateRecomendacaoProfissionalAsync(dto))
             .WithSummary("Cria uma recomendação profissional (V1)")
             .WithDescription("Este endpoint é responsável por criar uma nova recomendação profissional. Retorna 201 Created caso seja criada, ou erro caso não seja possível.")
@@ -45,6 +45,14 @@ public static class RecomendacaoProfissionalEndpoints
             .Accepts<RecomendacaoProfissionalPostDto>("application/json")
             .Produces<ResourceResponse<RecomendacaoProfissionalReadDto>>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+        recProfissionais.MapDelete("/{id:int}", async ([Description("Identificador único de Recomendação")] int id, RecomendacaoProfissionalService service) => await service.DeleteRecomendacaoProfissionalAsync(id))
+            .WithSummary("Deleta uma recomendação profissional (V1)")
+            .WithDescription("Este endpoint é responsável por remover uma recomendação profissional. Retorna 204 No Content se for removida, ou erro caso não seja possível.")
+            .MapToApiVersion(1, 0)
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
@@ -72,13 +80,13 @@ public static class RecomendacaoProfissionalEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações profissionais de um usuário (V2)")
             .MapToApiVersion(2, 0)
-            .Produces<ResourceResponse<RecomendacaoProfissionalReadDto>>(StatusCodes.Status200OK)
+            .Produces<ResourceResponse<RecomendacaoProfissionalResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError)
             .RequireAuthorization();
-        
+
         recProfissionais.MapPost("/", async (RecomendacaoProfissionalPostDto dto, RecomendacaoProfissionalService service) => await service.CreateRecomendacaoProfissionalAsync(dto))
             .WithSummary("Cria uma recomendação profissional (V2)")
             .WithDescription("Este endpoint é responsável por criar uma nova recomendação profissional. Retorna 201 Created caso seja criada, ou erro caso não seja possível.")
@@ -86,6 +94,16 @@ public static class RecomendacaoProfissionalEndpoints
             .Accepts<RecomendacaoProfissionalPostDto>("application/json")
             .Produces<ResourceResponse<RecomendacaoProfissionalReadDto>>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization();
+        
+        recProfissionais.MapDelete("/{id:int}", async ([Description("Identificador único de Recomendação")] int id, RecomendacaoProfissionalService service) => await service.DeleteRecomendacaoProfissionalAsync(id))
+            .WithSummary("Deleta uma recomendação profissional (V2)")
+            .WithDescription("Este endpoint é responsável por remover uma recomendação profissional. Retorna 204 No Content se for removida, ou erro caso não seja possível.")
+            .MapToApiVersion(2, 0)
+            .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError)
