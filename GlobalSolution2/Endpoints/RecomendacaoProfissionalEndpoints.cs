@@ -37,6 +37,16 @@ public static class RecomendacaoProfissionalEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError);
+        
+        recProfissionais.MapPost("/", async (RecomendacaoProfissionalPostDto dto, RecomendacaoProfissionalService service) => await service.CreateRecomendacaoProfissionalAsync(dto))
+            .WithSummary("Cria uma recomendação profissional (V1)")
+            .WithDescription("Este endpoint é responsável por criar uma nova recomendação profissional. Retorna 201 Created caso seja criada, ou erro caso não seja possível.")
+            .MapToApiVersion(1, 0)
+            .Accepts<RecomendacaoProfissionalPostDto>("application/json")
+            .Produces<ResourceResponse<RecomendacaoProfissionalReadDto>>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
 
         recProfissionais.MapGet("/", async ([Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, RecomendacaoProfissionalService service) =>
             await service.GetAllRecomendacoesAsync(pageNumber, pageSize))
@@ -66,6 +76,18 @@ public static class RecomendacaoProfissionalEndpoints
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization();
+        
+        recProfissionais.MapPost("/", async (RecomendacaoProfissionalPostDto dto, RecomendacaoProfissionalService service) => await service.CreateRecomendacaoProfissionalAsync(dto))
+            .WithSummary("Cria uma recomendação profissional (V2)")
+            .WithDescription("Este endpoint é responsável por criar uma nova recomendação profissional. Retorna 201 Created caso seja criada, ou erro caso não seja possível.")
+            .MapToApiVersion(2, 0)
+            .Accepts<RecomendacaoProfissionalPostDto>("application/json")
+            .Produces<ResourceResponse<RecomendacaoProfissionalReadDto>>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError)
             .RequireAuthorization();
     }

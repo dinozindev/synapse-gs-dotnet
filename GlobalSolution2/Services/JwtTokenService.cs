@@ -23,11 +23,11 @@ public class JwtTokenService
         
         _issuer = Environment.GetEnvironmentVariable("JwtSettings__Issuer")
                   ?? _config["JwtSettings:Issuer"]
-                  ?? "ProjetoGlobalSolutionAPI";
+                  ?? "SynapseAPI";
         
         _audience = Environment.GetEnvironmentVariable("JwtSettings__Audience")
                     ?? _config["JwtSettings:Audience"]
-                    ?? "ProjetoGlobalSolutionUsers";
+                    ?? "SynapseUsers";
         
         if (_secret.Length < 32)
         {

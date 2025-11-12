@@ -14,6 +14,7 @@ public static class RecomendacaoSaudeEndpoints
         recSaude.MapGet("/", async ([Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, RecomendacaoSaudeService service) =>
             await service.GetAllRecomendacoesAsync(pageNumber, pageSize))
             .WithSummary("Retorna todas as recomendações de saúde (paginação) (V1)")
+            .WithDescription("Este endpoint retorna todas as recomendações de saúde presentes no sistema. Retorna 200 OK se encontrado, ou 204 No Content caso não haja nenhuma.")
             .MapToApiVersion(1, 0)
             .Produces<PagedResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status204NoContent)
@@ -35,10 +36,21 @@ public static class RecomendacaoSaudeEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError);
+
+        recSaude.MapPost("/", async (RecomendacaoSaudePostDto dto, RecomendacaoSaudeService service) => await service.CreateRecomendacaoSaudeAsync(dto))
+            .WithSummary("Cria uma recomendação de saúde (V1)")
+            .WithDescription("Este endpoint é responsável por criar uma nova recomendação de saúde. Retorna 201 Created caso seja criada, ou erro caso não seja possível.")
+            .MapToApiVersion(1, 0)
+            .Accepts<RecomendacaoSaudePostDto>("application/json")
+            .Produces<ResourceResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
         
         recSaude.MapGet("/", async ([Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, RecomendacaoSaudeService service) =>
             await service.GetAllRecomendacoesAsync(pageNumber, pageSize))
             .WithSummary("Retorna todas as recomendações de saúde (paginação) (V2)")
+            .WithDescription("Este endpoint retorna todas as recomendações de saúde presentes no sistema. Retorna 200 OK se encontrado, ou 204 No Content caso não haja nenhuma.")
             .MapToApiVersion(2, 0)
             .Produces<PagedResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status204NoContent)
@@ -64,6 +76,18 @@ public static class RecomendacaoSaudeEndpoints
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization();
+        
+        recSaude.MapPost("/", async (RecomendacaoSaudePostDto dto, RecomendacaoSaudeService service) => await service.CreateRecomendacaoSaudeAsync(dto))
+            .WithSummary("Cria uma recomendação de saúde (V2)")
+            .WithDescription("Este endpoint é responsável por criar uma nova recomendação de saúde. Retorna 201 Created caso seja criada, ou erro caso não seja possível.")
+            .MapToApiVersion(2, 0)
+            .Accepts<RecomendacaoSaudePostDto>("application/json")
+            .Produces<ResourceResponse<RecomendacaoSaudeReadDto>>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError)
             .RequireAuthorization();
     }

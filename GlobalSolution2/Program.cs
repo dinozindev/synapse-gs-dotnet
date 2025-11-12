@@ -16,7 +16,6 @@ using Swashbuckle.AspNetCore.Filters;
 
 // TODO
 // Implementar Logging e Tracing
-// RecomendacaoProfissional e RecomendacaoSaude (falta POST)
 // Documentação
 // Migrations
 // Testes Unitários (xUnit)
@@ -40,11 +39,11 @@ if (string.IsNullOrWhiteSpace(jwtSecret))
 
 var jwtIssuer = Environment.GetEnvironmentVariable("JwtSettings__Issuer")
                 ?? builder.Configuration["JwtSettings:Issuer"]
-                ?? "ProjetoGlobalSolutionAPI"; 
+                ?? "SynapseAPI"; 
 
 var jwtAudience = Environment.GetEnvironmentVariable("JwtSettings__Audience")
                   ?? builder.Configuration["JwtSettings:Audience"]
-                  ?? "ProjetoGlobalSolutionUsers"; 
+                  ?? "SynapseUsers"; 
 
 var key = Encoding.ASCII.GetBytes(jwtSecret);
 
@@ -149,13 +148,13 @@ builder.Services.AddSwaggerGen(options =>
 {
      options.SwaggerDoc("v1", new OpenApiInfo 
     { 
-        Title = "Global Solution API", 
+        Title = "Synapse API", 
         Version = "v1" 
     });
     
     options.SwaggerDoc("v2", new OpenApiInfo 
     { 
-        Title = "Global Solution API", 
+        Title = "Synapse API", 
         Version = "v2" 
     });
 
@@ -217,8 +216,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Global Solution API V1");
-        options.SwaggerEndpoint("/swagger/v2/swagger.json", "Global Solution API V2");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Synapse API V1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "Synapse API V2");
         options.RoutePrefix = "swagger";
         options.DisplayRequestDuration();
     });
