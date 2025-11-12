@@ -46,48 +46,16 @@ public class AppDbContext : DbContext
             .Property(c => c.CategoriaCompetencia)
             .HasConversion<string>();
 
-        // Recomendacao
-        modelBuilder.Entity<Recomendacao>()
-            .HasKey(r => r.RecomendacaoId);
+        // Configura herança TPT (Table per Type)
+        modelBuilder.Entity<Recomendacao>().ToTable("RECOMENDACAO");
+        modelBuilder.Entity<RecomendacaoProfissional>().ToTable("RECOMENDACAO_PROFISSIONAL");
+        modelBuilder.Entity<RecomendacaoSaude>().ToTable("RECOMENDACAO_SAUDE");
 
+        // Relacionamento com Usuario
         modelBuilder.Entity<Recomendacao>()
-            .HasOne<Usuario>()
+            .HasOne(r => r.Usuario)
             .WithMany(u => u.Recomendacoes)
             .HasForeignKey(r => r.UsuarioId);
-        
-        // RecomendacaoProfissional
-        modelBuilder.Entity<RecomendacaoProfissional>()
-            .HasKey(rp => rp.RecomendacaoId);
-
-        modelBuilder.Entity<RecomendacaoProfissional>()
-            .Property(rp => rp.CategoriaRecomendacao)
-            .HasConversion<string>();
-
-        modelBuilder.Entity<RecomendacaoProfissional>()
-            .Property(rp => rp.AreaRecomendacao)
-            .HasConversion<string>();
-
-        modelBuilder.Entity<RecomendacaoProfissional>()
-            .HasOne<Recomendacao>()
-            .WithOne(r => r.RecomendacaoProfissional)
-            .HasForeignKey<RecomendacaoProfissional>(rp => rp.RecomendacaoId);
-
-        // RecomendacaoSaude
-        modelBuilder.Entity<RecomendacaoSaude>()
-            .HasKey(rs => rs.RecomendacaoId);
-
-        modelBuilder.Entity<RecomendacaoSaude>()
-            .Property(rs => rs.TipoSaude)
-            .HasConversion<string>();
-
-        modelBuilder.Entity<RecomendacaoSaude>()
-            .Property(rs => rs.NivelAlerta)
-            .HasConversion<string>();
-
-        modelBuilder.Entity<RecomendacaoSaude>()
-            .HasOne<Recomendacao>()
-            .WithOne(r => r.RecomendacaoSaude)
-            .HasForeignKey<RecomendacaoSaude>(rs => rs.RecomendacaoId);
 
 
         // RegistroBemEstar
@@ -111,8 +79,8 @@ public class AppDbContext : DbContext
             .HasPrecision(2, 0);
 
         modelBuilder.Entity<RegistroBemEstar>()
-            .HasOne<Usuario>()
-            .WithMany(u => u.RegistrosBemEstar)
-            .HasForeignKey(rb => rb.UsuarioId);
-        }
-}
+        .HasOne(rb => rb.Usuario) 
+        .WithMany(u => u.RegistrosBemEstar)
+        .HasForeignKey(rb => rb.UsuarioId);
+        
+}}

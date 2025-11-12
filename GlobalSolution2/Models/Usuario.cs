@@ -34,7 +34,7 @@ public class Usuario
     public required string NivelExperiencia { get; set; }
 
     public ICollection<UsuarioCompetencia> UsuarioCompetencias { get; set; } = new List<UsuarioCompetencia>();
-
+    
     // Relação com Recomendacoes
     public ICollection<Recomendacao> Recomendacoes { get; set; } = new List<Recomendacao>();
 
