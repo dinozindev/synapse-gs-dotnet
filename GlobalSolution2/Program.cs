@@ -12,10 +12,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.Filters;
 
 // TODO
-// Implementar Logging e Tracing
+// Implementar Logging
 // Documentação
 // Testes Unitários (xUnit)
 // Vídeo
@@ -24,6 +26,28 @@ using Swashbuckle.AspNetCore.Filters;
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Visualizar saída do Logger
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+var serviceName = "Synapse_API";
+var serviceVersion = "1.0.0";
+
+// Configuração OpenTelemetry 
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracerProviderBuilder =>
+    {
+        tracerProviderBuilder
+            .AddAspNetCoreInstrumentation() 
+            .AddHttpClientInstrumentation() 
+            .AddSource(serviceName) 
+            .SetResourceBuilder(
+                ResourceBuilder.CreateDefault()
+                    .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
+            .AddConsoleExporter();  
+    });
 
 // CONFIGURAÇÃO DO JWT 
 var jwtSecret = Environment.GetEnvironmentVariable("JwtSettings__Secret")
