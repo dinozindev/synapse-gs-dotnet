@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
@@ -17,10 +18,12 @@ using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.Filters;
 
 // TODO
-// Implementar Logging (Recomendacoes)
+// Implementar Logging (JWT???)
 // Documentação
 // Testes Unitários (xUnit)
 // Vídeo
+
+[assembly: InternalsVisibleTo("GlobalSolution2.Tests")]
 
 // Carregando variáveis de ambiente do arquivo .env
 Env.Load();
