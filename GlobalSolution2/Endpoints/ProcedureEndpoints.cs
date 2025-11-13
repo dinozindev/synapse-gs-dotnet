@@ -48,6 +48,7 @@ public static class ProcedureEndpoints
         .MapToApiVersion(1, 0)
         .Produces(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError);
 
         procedures.MapPost("/recomendacoes/profissional", async (RecomendacaoProfissionalPostDto dto, ProcedureService service) =>
@@ -58,6 +59,7 @@ public static class ProcedureEndpoints
         .MapToApiVersion(1, 0)
         .Produces(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError);
 
         procedures.MapPost("/recomendacoes/saude", async (RecomendacaoSaudePostDto dto, ProcedureService service) =>
@@ -68,6 +70,7 @@ public static class ProcedureEndpoints
         .MapToApiVersion(1, 0)
         .Produces(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError);
 
         procedures.MapGet("/exportar/usuarios", async (ProcedureService service) =>
@@ -126,6 +129,7 @@ public static class ProcedureEndpoints
         .Produces(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError)
         .RequireAuthorization();
 
@@ -138,6 +142,7 @@ public static class ProcedureEndpoints
         .Produces(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError)
         .RequireAuthorization();
 
@@ -150,6 +155,7 @@ public static class ProcedureEndpoints
         .Produces(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError)
         .RequireAuthorization();
 

@@ -16,8 +16,8 @@ public class RecomendacaoSaudeResumoPagedResponseExample : IExamplesProvider<Pag
 
         var links = new List<LinkDto>
         {
-            new LinkDto("self", "/recomendacoes-saude?pageNumber=1&pageSize=10", "GET"),
-            new LinkDto("next", "/recomendacoes-saude?pageNumber=2&pageSize=10", "GET"),
+            new LinkDto("self", "/recomendacoes/saude?pageNumber=1&pageSize=10", "GET"),
+            new LinkDto("next", "/recomendacoes/saude?pageNumber=2&pageSize=10", "GET"),
             new LinkDto("prev", "", "GET")
         };
 

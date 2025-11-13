@@ -14,10 +14,9 @@ public class RecomendacaoSaudeResourceResponseExample : IExamplesProvider<Resour
 
         var links = new List<LinkDto>
         {
-            new LinkDto("self", "/recomendacoes-saude/1", "GET"),
-            new LinkDto("update", "/recomendacoes-saude/1", "PUT"),
-            new LinkDto("delete", "/recomendacoes-saude/1", "DELETE"),
-            new LinkDto("list", "/recomendacoes-saude", "GET")
+            new LinkDto("self", "/recomendacoes/saude/1", "GET"),
+            new LinkDto("delete", "/recomendacoes/saude/1", "DELETE"),
+            new LinkDto("list", "/recomendacoes/saude", "GET")
         };
 
         return new ResourceResponse<RecomendacaoSaudeReadDto>(recomendacao, links);

@@ -14,10 +14,9 @@ public class RecomendacaoProfissionalResourceResponseExample : IExamplesProvider
 
         var links = new List<LinkDto>
         {
-            new LinkDto("self", "/recomendacoes-profissionais/1", "GET"),
-            new LinkDto("update", "/recomendacoes-profissionais/1", "PUT"),
-            new LinkDto("delete", "/recomendacoes-profissionais/1", "DELETE"),
-            new LinkDto("list", "/recomendacoes-profissionais", "GET")
+            new LinkDto("self", "/recomendacoes/profissional/1", "GET"),
+            new LinkDto("delete", "/recomendacoes/profissional/1", "DELETE"),
+            new LinkDto("list", "/recomendacoes/profissional", "GET")
         };
 
         return new ResourceResponse<RecomendacaoProfissionalReadDto>(recomendacao, links);

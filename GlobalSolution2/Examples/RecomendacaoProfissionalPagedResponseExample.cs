@@ -17,8 +17,8 @@ public class RecomendacaoProfissionalPagedResponseExample : IExamplesProvider<Pa
 
         var links = new List<LinkDto>
         {
-            new LinkDto("self", "/recomendacoes-profissionais?pageNumber=1&pageSize=10", "GET"),
-            new LinkDto("next", "/recomendacoes-profissionais?pageNumber=2&pageSize=10", "GET"),
+            new LinkDto("self", "/recomendacoes/profissional?pageNumber=1&pageSize=10", "GET"),
+            new LinkDto("next", "/recomendacoes/profissional?pageNumber=2&pageSize=10", "GET"),
             new LinkDto("prev", "", "GET")
         };
 

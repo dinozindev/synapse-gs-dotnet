@@ -21,7 +21,7 @@ public static class RegistroBemEstarEndpoints {
         .Produces(StatusCodes.Status204NoContent)
         .Produces(StatusCodes.Status500InternalServerError);
 
-        registros.MapGet("/registros-usuario/{usuarioId:int}", async ([Description("Identificador único de Usuário")] int usuarioId, RegistroBemEstarService service) => await service.GetRegistrosDeUsuarioAsync(usuarioId))
+        registros.MapGet("/registros-usuario/{usuarioId:int}", async ([Description("Identificador único de Usuário")] int usuarioId, [Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, RegistroBemEstarService service) => await service.GetRegistrosDeUsuarioAsync(usuarioId))
         .WithSummary("Retorna todos os registros de bem estar de um usuário pelo ID (paginação) (V1)")
         .WithDescription("Este endpoint retorna a lista de todos os registros de bem estar de um usuário específico, paginados de acordo com os parâmetros **pageNumber** e **pageSize**.")
         .MapToApiVersion(1, 0)
@@ -46,7 +46,6 @@ public static class RegistroBemEstarEndpoints {
         .Produces<ResourceResponse<RegistroBemEstarReadDto>>(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status409Conflict)
         .Produces(StatusCodes.Status500InternalServerError);
 
         registros.MapPut("/{id:int}", async ([Description("Identificador único de Registro de Bem Estar")] int id, RegistroBemEstarPutDto dto, RegistroBemEstarService service) => await service.UpdateRegistroBemEstarAsync(id, dto))
@@ -76,7 +75,7 @@ public static class RegistroBemEstarEndpoints {
         .Produces(StatusCodes.Status500InternalServerError)
         .RequireAuthorization();
 
-        registros.MapGet("/registros-usuario/{usuarioId:int}", async ([Description("Identificador único de Usuário")] int usuarioId, RegistroBemEstarService service) => await service.GetRegistrosDeUsuarioAsync(usuarioId))
+        registros.MapGet("/registros-usuario/{usuarioId:int}", async ([Description("Identificador único de Usuário")] int usuarioId, [Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, RegistroBemEstarService service) => await service.GetRegistrosDeUsuarioAsync(usuarioId))
         .WithSummary("Retorna todos os registros de bem estar de um usuário pelo ID (paginação) (V2)")
         .WithDescription("Este endpoint retorna a lista de todos os registros de bem estar de um usuário específico, paginados de acordo com os parâmetros **pageNumber** e **pageSize**.")
         .MapToApiVersion(2, 0)
@@ -106,7 +105,6 @@ public static class RegistroBemEstarEndpoints {
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status401Unauthorized)
         .Produces(StatusCodes.Status404NotFound)
-        .Produces(StatusCodes.Status409Conflict)
         .Produces(StatusCodes.Status500InternalServerError)
         .RequireAuthorization();
 
