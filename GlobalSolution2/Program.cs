@@ -17,7 +17,6 @@ using Swashbuckle.AspNetCore.Filters;
 // TODO
 // Implementar Logging e Tracing
 // Documentação
-// Migrations
 // Testes Unitários (xUnit)
 // Vídeo
 
@@ -111,6 +110,7 @@ builder.Services.AddScoped<CompetenciaService>();
 builder.Services.AddScoped<RegistroBemEstarService>();
 builder.Services.AddScoped<RecomendacaoProfissionalService>();
 builder.Services.AddScoped<RecomendacaoSaudeService>();
+builder.Services.AddScoped<ProcedureService>();
 
 // RATE LIMITER
 builder.Services.AddRateLimiter(options =>
@@ -208,6 +208,7 @@ app.MapCompetenciaEndpoints(apiVersionSet);
 app.MapRegistroBemEstarEndpoints(apiVersionSet);
 app.MapRecomendacaoProfissionalEndpoints(apiVersionSet);
 app.MapRecomendacaoSaudeEndpoints(apiVersionSet);
+app.MapProcedureEndpoints(apiVersionSet);
 app.MapHealthCheckEndpoints();
 
 // SWAGGER UI
