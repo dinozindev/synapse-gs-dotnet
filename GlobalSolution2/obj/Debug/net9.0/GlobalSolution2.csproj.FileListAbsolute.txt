@@ -160,7 +160,6 @@ D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Data.DataS
 D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Data.dll
 D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Diagnostics.Contracts.dll
 D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Diagnostics.Debug.dll
-D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Diagnostics.DiagnosticSource.dll
 D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Diagnostics.EventLog.dll
 D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Diagnostics.FileVersionInfo.dll
 D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\refs\System.Diagnostics.Process.dll
@@ -488,3 +487,11 @@ D:\Aulas\GlobalSolution2\GlobalSolution2\obj\Debug\net9.0\refint\GlobalSolution2
 D:\Aulas\GlobalSolution2\GlobalSolution2\obj\Debug\net9.0\GlobalSolution2.pdb
 D:\Aulas\GlobalSolution2\GlobalSolution2\obj\Debug\net9.0\GlobalSolution2.genruntimeconfig.cache
 D:\Aulas\GlobalSolution2\GlobalSolution2\obj\Debug\net9.0\ref\GlobalSolution2.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\OpenTelemetry.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\OpenTelemetry.Api.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\OpenTelemetry.Api.ProviderBuilderExtensions.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\OpenTelemetry.Exporter.Console.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\OpenTelemetry.Extensions.Hosting.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\OpenTelemetry.Instrumentation.AspNetCore.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\OpenTelemetry.Instrumentation.Http.dll
+D:\Aulas\GlobalSolution2\GlobalSolution2\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll

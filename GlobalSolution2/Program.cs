@@ -18,9 +18,8 @@ using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.Filters;
 
 // TODO
-// Implementar Logging (JWT???)
 // Documentação
-// Testes Unitários (xUnit)
+// Exemplos???
 // Vídeo
 
 [assembly: InternalsVisibleTo("GlobalSolution2.Tests")]

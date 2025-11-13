@@ -46,7 +46,7 @@ public class AppDbContext : DbContext
             .Property(c => c.CategoriaCompetencia)
             .HasConversion<string>();
 
-        // Configura herança TPT (Table per Type)
+        // Configura herança 
         modelBuilder.Entity<Recomendacao>().ToTable("RECOMENDACAO");
         modelBuilder.Entity<RecomendacaoProfissional>().ToTable("RECOMENDACAO_PROFISSIONAL");
         modelBuilder.Entity<RecomendacaoSaude>().ToTable("RECOMENDACAO_SAUDE");
