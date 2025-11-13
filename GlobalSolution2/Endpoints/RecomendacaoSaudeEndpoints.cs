@@ -32,7 +32,7 @@ public static class RecomendacaoSaudeEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações de saúde de um usuário (V1)")
             .MapToApiVersion(1, 0)
-            .Produces<ResourceResponse<RecomendacaoSaudeResumoDto>>(StatusCodes.Status200OK)
+            .Produces<PagedResponse<RecomendacaoSaudeResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError);
@@ -80,7 +80,7 @@ public static class RecomendacaoSaudeEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações de saúde de um usuário (V2)")
             .MapToApiVersion(2, 0)
-            .Produces<ResourceResponse<RecomendacaoSaudeResumoDto>>(StatusCodes.Status200OK)
+            .Produces<PagedResponse<RecomendacaoSaudeResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)

@@ -65,7 +65,9 @@ public class CompetenciaService
             Data: competenciaDto,
             Links: new List<LinkDto>
             {
-                new("self", $"competencias/{id}", "GET"),
+                new("self", $"/competencias/{id}", "GET"),
+                new("update", $"/competencias/{id}", "PUT"),
+                new("delete", $"/competencias/{id}", "DELETE"),
                 new("list", "/competencias", "GET")
             }
         );

@@ -33,7 +33,7 @@ public static class RecomendacaoProfissionalEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações profissionais de um usuário (V1)")
             .MapToApiVersion(1, 0)
-            .Produces<ResourceResponse<RecomendacaoProfissionalResumoDto>>(StatusCodes.Status200OK)
+            .Produces<PagedResponse<RecomendacaoProfissionalResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError);
@@ -80,7 +80,7 @@ public static class RecomendacaoProfissionalEndpoints
             await service.GetRecomendacoesByUsuarioAsync(usuarioId))
             .WithSummary("Retorna todas as recomendações profissionais de um usuário (V2)")
             .MapToApiVersion(2, 0)
-            .Produces<ResourceResponse<RecomendacaoProfissionalResumoDto>>(StatusCodes.Status200OK)
+            .Produces<PagedResponse<RecomendacaoProfissionalResumoDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status204NoContent)
