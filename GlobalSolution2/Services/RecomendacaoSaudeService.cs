@@ -1,18 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using GlobalSolution2.Dtos;
 using GlobalSolution2.Models;
+using System.Data;
 
 namespace GlobalSolution2.Services;
 
 public class RecomendacaoSaudeService
 {
     private readonly AppDbContext _db;
+    private readonly ILogger<RecomendacaoSaudeService> _logger;
 
-    public RecomendacaoSaudeService(AppDbContext db)
+    public RecomendacaoSaudeService(AppDbContext db, ILogger<RecomendacaoSaudeService> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
+    // retorna todas as recomendações de saúde com paginação
     public async Task<IResult> GetAllRecomendacoesAsync(int pageNumber = 1, int pageSize = 10)
     {
         var totalCount = await _db.RecomendacoesSaude.CountAsync();
@@ -49,16 +53,23 @@ public class RecomendacaoSaudeService
         return Results.Ok(response);
     }
 
+    // retorna uma recomendação por ID
     public async Task<IResult> GetRecomendacaoByIdAsync(int id)
     {
+        _logger.LogInformation("Buscando Recomendação de Saúde com ID {Id}", id);
         var recomendacao = await _db.RecomendacoesSaude
             .Include(r => r.Usuario)
             .FirstOrDefaultAsync(r => r.RecomendacaoId == id);
 
         if (recomendacao is null)
+        {
+            _logger.LogWarning("Recomendação de Saúde com ID {Id} não encontrada", id);
             return Results.NotFound("Nenhuma recomendação de saúde encontrada com o ID informado.");
+        }
 
         var dto = RecomendacaoSaudeReadDto.ToDto(recomendacao);
+
+        _logger.LogInformation("Recomendação de Saúde com ID {Id} encontrada com sucesso", id);
 
         var response = new ResourceResponse<RecomendacaoSaudeReadDto>(
             Data: dto,
@@ -72,12 +83,17 @@ public class RecomendacaoSaudeService
         return Results.Ok(response);
     }
 
+    // retorna todas as recomendações de saúde de um usuário
     public async Task<IResult> GetRecomendacoesByUsuarioAsync(int usuarioId, int pageNumber = 1, int pageSize = 10)
     {
+        _logger.LogInformation("Buscando todas as Recomendações de Saúde do Usuário de ID {Id}", usuarioId);
         var usuario = await _db.Usuarios.FindAsync(usuarioId);
         if (usuario is null)
+        {
+            _logger.LogWarning("Usuário com ID {Id} não encontrado", usuarioId);
             return Results.NotFound("Usuário não encontrado.");
-
+        }
+            
         var recomendacoes = await _db.RecomendacoesSaude
             .Where(r => r.UsuarioId == usuarioId)
             .OrderByDescending(r => r.DataRecomendacao)
@@ -86,7 +102,11 @@ public class RecomendacaoSaudeService
         var totalCount = recomendacoes.Count;
 
         if (!recomendacoes.Any())
+        {
+            _logger.LogInformation("Nenhuma Recomendação de Saúde encontrada para o Usuário com ID {Id}", usuarioId);
             return Results.NoContent();
+        }
+            
 
         var recomendacoesDto = recomendacoes.Select(RecomendacaoSaudeReadDto.ToDto).ToList();
 
@@ -111,13 +131,23 @@ public class RecomendacaoSaudeService
         return Results.Ok(response);
     }
 
+    // cria uma recomendação de saúde
     public async Task<IResult> CreateRecomendacaoSaudeAsync(RecomendacaoSaudePostDto dto)
     {
+        _logger.LogInformation("Iniciando criação de Recomendação de Saúde: {TituloRecomendacao}", dto.TituloRecomendacao);
         var validation = await ValidateRecomendacaoSaude(dto);
-        if (validation is not null) return validation;
+        if (validation is not null)
+        {
+            _logger.LogWarning("Falha na validação da criação da Recomendação de Saúde: {TituloRecomendacao}", dto.TituloRecomendacao);
+           return validation; 
+        } 
 
         var usuario = await _db.Usuarios.FindAsync(dto.UsuarioId);
-        if (usuario is null) return Results.NotFound("Nenhum usuário encontrado com o ID informado.");
+        if (usuario is null)
+        {
+            _logger.LogWarning("Usuário com ID {Id} não encontrado", dto.UsuarioId);
+            return Results.NotFound("Nenhum usuário encontrado com o ID informado.");
+        }
 
         var recomendacao = new RecomendacaoSaude
         {
@@ -135,8 +165,9 @@ public class RecomendacaoSaudeService
         _db.RecomendacoesSaude.Add(recomendacao);
         await _db.SaveChangesAsync();
 
-        var recomendacaoDto = RecomendacaoSaudeReadDto.ToDto(recomendacao);
+        _logger.LogInformation("Recomendação de Saúde com ID {Id} criada com sucesso", recomendacao.RecomendacaoId);
 
+        var recomendacaoDto = RecomendacaoSaudeReadDto.ToDto(recomendacao);
 
         var response = new ResourceResponse<RecomendacaoSaudeReadDto>(
             Data: recomendacaoDto,
@@ -150,16 +181,26 @@ public class RecomendacaoSaudeService
         return Results.Created($"/recomendacoes-saude/{recomendacao.RecomendacaoId}", response);
     }
 
-    public async Task<IResult> DeleteRecomendacaoSaudeAsync(int id) 
+    // deleta uma recomendação de saúde
+    public async Task<IResult> DeleteRecomendacaoSaudeAsync(int id)
     {
+        _logger.LogInformation("Iniciando remoção de Recomendação de Saúde com ID {Id}", id);
         var recomendacao = await _db.RecomendacoesSaude.FindAsync(id);
-        if (recomendacao is null) return Results.NotFound("Recomendação de Saúde não encontrada com ID informado.");
+        if (recomendacao is null)
+        {
+            _logger.LogWarning("Recomendação de Saúde com ID {Id} não encontrada", id);
+            return Results.NotFound("Recomendação de Saúde não encontrada com ID informado.");
+        } 
 
         _db.RecomendacoesSaude.Remove(recomendacao);
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Recomendação de Saúde com ID {Id} removida com sucesso", id);
+
         return Results.NoContent();
     }
 
+    // Validação de POST
     private async Task<IResult?> ValidateRecomendacaoSaude(RecomendacaoSaudePostDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.TituloRecomendacao))

@@ -17,7 +17,7 @@ using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.Filters;
 
 // TODO
-// Implementar Logging
+// Implementar Logging (Recomendacoes)
 // Documentação
 // Testes Unitários (xUnit)
 // Vídeo
