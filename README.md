@@ -1633,463 +1633,768 @@ Códigos de Resposta
 
 ### Procedures (apenas para a disciplina de Database)
 
-- #### Busca todas as motos que possuem cliente atrelado
+- #### Cria um usuário a partir da procedure sp_inserir_usuario
 
 ```http
- GET /api/v2/procedures/motos-com-cliente
+  POST /api/v2/procedures/usuarios
 ```
 
-Response Body:
+Request Body:
+
+```json
+{
+  "nomeUsuario": "",
+  "senhaUsuario": "",
+  "areaAtual": "",
+  "areaInteresse": "",
+  "objetivoCarreira": "",
+  "nivelExperiencia": ""
+}
 ```
-[
-  {
-    "motoId": 1,
-    "placaMoto": "ABC1234",
-    "modeloMoto": "Mottu Pop",
-    "situacaoMoto": "Em Trânsito",
-    "chassiMoto": "CHS12345678901234",
-    "nomeCliente": "João Silva",
-    "telefoneCliente": "(11) 91234-5678"
-  },
-  {
-    "motoId": 2,
-    "placaMoto": "DEF5678",
-    "modeloMoto": "Mottu Sport",
-    "situacaoMoto": "Em Trânsito",
-    "chassiMoto": "CHS22345678901234",
-    "nomeCliente": "Maria Oliveira",
-    "telefoneCliente": "(21) 99876-5432"
-  }
-]
+
+Exemplo: 
+
+```json
+{
+  "nomeUsuario": "jorge.roberto",
+  "senhaUsuario": "jorge12345",
+  "areaAtual": "Frentista",
+  "areaInteresse": "Back-end Java",
+  "objetivoCarreira": "Transição para Aplicações Back-end com Java e Spring Boot",
+  "nivelExperiencia": "Nenhuma"
+}
 ```
 
 Códigos de Resposta
 
 | Código HTTP       | Significado                     | Quando ocorre                                                  |
 |-------------------|----------------------------------|----------------------------------------------------------------|
-| 200 OK    | Requisição bem-sucedida        | Quando as motos são retornadas com sucesso   |
+| 201 Created       | Recurso criado com sucesso      | Quando um usuário é criado com êxito |
+| 400 Bad Request   | Requisição malformada           | Quando os dados enviados estão incorretos ou incompletos       |
 | 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
-| 404 Not Found     | Recurso não encontrado         | Quando as motos não são encontradas                           |
 | 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
 
-- #### Gera relatório de movimentações por setor
+- #### Adiciona uma competência ao Usuário através da procedure sp_inserir_usuario_competencia
 
 ```http
- GET /api/v2/procedures/relatorio-movimentacoes
+  POST /api/v2/procedures/usuarios/{usuarioId}/competencias/{competenciaId}
 ```
 
-Response Body:
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `usuarioId`      | `int` | **Obrigatório**. O ID do usuário que você deseja ter uma competência associada |
+| `competenciaId`      | `int` | **Obrigatório**. O ID da competência você deseja associar a um usuário |
+
+Códigos de Resposta
+
+| Código HTTP       | Significado                     | Quando ocorre                                                  |
+|-------------------|----------------------------------|----------------------------------------------------------------|
+| 200 OK    | Requisição bem-sucedida        | Quando a associação é criada com sucesso   |
+| 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
+| 404 Not Found     | Recurso não encontrado          | Quando o usuário e competência especificados não são encontrados               |
+| 409 Conflict     | Conflito de estado          | Quando o usuário e competência especificados já estão associados um ao outro             |
+| 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
+
+- #### Cria uma competência através da procedure sp_inserir_competencia
+
+```http
+  POST /api/v2/procedures/competencias
 ```
-[
-  "Pátio          Setor                         Quantidade",
-  "------------   --------------------------    ----------",
-  "               Sub Total      0",
-  "               Sub Total      0",
-  "               Sub Total      0",
-  "               Sub Total      0",
-  "Pátio Norte    Agendada Para Manutenção      4",
-  "Pátio Norte    Danos Estruturais Graves      4",
-  "Pátio Norte    Minha Mottu                   5",
-  "Pátio Norte    Motor Defeituoso              4",
-  "Pátio Norte    Pendência                     4",
-  "Pátio Norte    Pronta para Aluguel           4",
-  "Pátio Norte    Reparos Simples               4",
-  "Pátio Norte    Sem Placa                     4",
-  "               Sub Total      33",
-  "               Sub Total      0",
-  "               Sub Total      0",
-  "               Sub Total      0",
-  "Total Geral    33"
-]
+
+Request Body:
+
+```json
+{
+  "nomeCompetencia": "",
+  "categoriaCompetencia": "",
+  "descricaoCompetencia": ""
+}
+```
+
+Exemplo: 
+
+```json
+{
+  "nomeCompetencia": "Flutter",
+  "categoriaCompetencia": "Front-end",
+  "descricaoCompetencia": "Kit de desenvolvimento de software de interface de usuário"
+}
 ```
 
 Códigos de Resposta
 
 | Código HTTP       | Significado                     | Quando ocorre                                                  |
 |-------------------|----------------------------------|----------------------------------------------------------------|
-| 200 OK    | Requisição bem-sucedida        | Quando o relatório é retornado com sucesso   |
+| 201 Created       | Recurso criado com sucesso      | Quando uma competência é criada com êxito |
+| 400 Bad Request   | Requisição malformada           | Quando os dados enviados estão incorretos ou incompletos       |
 | 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
-| 404 Not Found     | Recurso não encontrado         | Quando o relatório não é gerado                           |
 | 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
 
-- #### Exporta movimentações em JSON
+- #### Cria um registro de bem estar através da procedure sp_inserir_registro_bem_estar
 
 ```http
- GET /api/v2/procedures/exportar/movimentacoes
+  POST /api/v2/procedures/bem-estar
 ```
 
-Response Body:
+Request Body:
+
+```json
+{
+  "dataRegistro": "",
+  "humorRegistro": "",
+  "horasSono": 0,
+  "horasTrabalho": 0,
+  "nivelEnergia": 0,
+  "nivelEstresse": 0,
+  "observacaoRegistro": "",
+  "usuarioId": 0
+}
 ```
 
-  {
-    "_id": "MOV_000032",
-    "movimentacaoId": 32,
-    "dtEntrada": "2025-02-18T00:00:00Z",
-    "dtSaida": null,
-    "descricao": "Uso interno Mottu",
-    "status": "ativa",
-    "diasPermanencia": 251,
-    "moto": {
-      "id": 32,
-      "placa": "AAX8883",
-      "modelo": "Mottu-E",
-      "chassi": "CHS90000000000024",
-      "situacao": "Ativa"
-    },
-    "cliente": {
-      "id": 32,
-      "nome": "Juliane Castro",
-      "telefone": "1144444444",
-      "cpf": "93456789002",
-      "email": "juliane@email.com",
-      "sexo": "F"
-    },
-    "localizacao": {
-      "patio": {
-        "id": 1,
-        "nome": "Pátio Norte",
-        "zona": "Zona Norte"
-      },
-      "setor": {
-        "id": 8,
-        "tipo": "Minha Mottu",
-        "status": "Parcial"
-      },
-      "vaga": {
-        "id": 32,
-        "numero": "A8-V4",
-        "ocupada": true
-      }
-    }
-  },
-  {
-    "_id": "MOV_000033",
-    "movimentacaoId": 33,
-    "dtEntrada": "2025-10-15T08:30:00Z",
-    "dtSaida": null,
-    "descricao": "Manutenção preventiva",
-    "status": "ativa",
-    "diasPermanencia": 12,
-    "moto": {
-      "id": 45,
-      "placa": "BCD4567",
-      "modelo": "Mottu Pop",
-      "chassi": "CHS11122233344455",
-      "situacao": "Em Manutenção"
-    },
-    "cliente": {
-      "id": 18,
-      "nome": "Pedro Almeida",
-      "telefone": "11955556666",
-      "cpf": "12345678901",
-      "email": "pedro@email.com",
-      "sexo": "M"
-    },
-    "localizacao": {
-      "patio": {
-        "id": 8,
-        "nome": "Pátio ABC",
-        "zona": "ABC Paulista"
-      },
-      "setor": {
-        "id": 61,
-        "tipo": "Agendada Para Manutenção",
-        "status": "Livre"
-      },
-      "vaga": {
-        "id": 190,
-        "numero": "H5-V1",
-        "ocupada": true
-      }
-    }
-  }
-]
+Exemplo: 
+
+```json
+{
+  "dataRegistro": "2025-11-13T20:29:18.9479977Z",
+  "humorRegistro": "Feliz",
+  "horasSono": 9,
+  "horasTrabalho": 6,
+  "nivelEnergia": 8,
+  "nivelEstresse": 4,
+  "observacaoRegistro": "Finalizei as demandas no trabalho",
+  "usuarioId": 1
+}
 ```
 
 Códigos de Resposta
 
 | Código HTTP       | Significado                     | Quando ocorre                                                  |
 |-------------------|----------------------------------|----------------------------------------------------------------|
-| 200 OK    | Requisição bem-sucedida        | Quando as movimentações são retornadas com sucesso   |
+| 201 Created       | Recurso criado com sucesso      | Quando um registro é criado com êxito |
+| 400 Bad Request   | Requisição malformada           | Quando os dados enviados estão incorretos ou incompletos       |
 | 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
-| 404 Not Found     | Recurso não encontrado         | Quando nenhuma movimentação é retornada                           |
+| 404 Not Found | Recurso não encontrado        |  Quando nenhum usuário foi encontrado com o ID especificado      |
 | 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
 
-- #### Exporta pátios em JSON
+- #### Cria uma recomendação profissional através da procedure sp_inserir_recomendacao_profissional_completa
 
 ```http
- GET /api/v2/procedures/exportar/patios
+  POST /api/v2/procedures/recomendacoes/profissional
 ```
 
-Response Body:
+Request Body:
+
+```json
+{
+  "tituloRecomendacao": "",
+  "descricaoRecomendacao": "",
+  "promptUsado": "",
+  "categoriaRecomendacao": "",
+  "areaRecomendacao": "",
+  "fonteRecomendacao": "",
+  "usuarioId": 0
+}
 ```
-[
-  {
-    "_id": "PATIO_008",
-    "patioId": 8,
-    "nome": "Pátio ABC",
-    "localizacao": "Santo André",
-    "descricao": "Área nova",
-    "gerente": {
-      "id": 8,
-      "nome": "Luciana Prado",
-      "telefone": "11900008888",
-      "cpf": "22222222207"
-    },
-    "funcionarios": [
+
+Exemplo: 
+
+```json
+{
+  "tituloRecomendacao": "Vaga Front-end Pleno",
+  "descricaoRecomendacao": "Oportunidade para desenvolvedor front-end com anos de experiência",
+  "promptUsado": "IA me de uma vaga para um desenvolvedor com conhecimentos avançados em React, Tailwind e Mobile",
+  "categoriaRecomendacao": "Vaga",
+  "areaRecomendacao": "Front-end",
+  "fonteRecomendacao": "LinkedIn",
+  "usuarioId": 1
+}
+```
+
+Códigos de Resposta
+
+| Código HTTP       | Significado                     | Quando ocorre                                                  |
+|-------------------|----------------------------------|----------------------------------------------------------------|
+| 201 Created       | Recurso criado com sucesso      | Quando uma recomendação é criada com êxito |
+| 400 Bad Request   | Requisição malformada           | Quando os dados enviados estão incorretos ou incompletos       |
+| 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
+| 404 Not Found | Recurso não encontrado        |  Quando nenhum usuário foi encontrado com o ID especificado      |
+| 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
+
+- #### Cria uma recomendação de saúde através da procedure sp_criar_recomendacao_saude_completa
+
+```http
+  POST /api/v2/procedures/recomendacoes/saude
+```
+
+Request Body:
+
+```json
+{
+  "tituloRecomendacao": "",
+  "descricaoRecomendacao": "",
+  "promptUsado": "",
+  "tipoSaude": "",
+  "nivelAlerta": "",
+  "mensagemSaude": "",
+  "usuarioId": 0
+}
+```
+
+Exemplo: 
+
+```json
+{
+  "tituloRecomendacao": "Melhorar sono",
+  "descricaoRecomendacao": "Optar por dormir em um horário antes da Meia-noite para uma melhor noite de sono.",
+  "promptUsado": "IA me de uma sugestão de como ajustar meu horário de sono para melhorar minha energia e estresse durante o dia.",
+  "tipoSaude": "Sono",
+  "nivelAlerta": "Moderado",
+  "mensagemSaude": "Estabeleça rotina de sono consistente",
+  "usuarioId": 1
+}
+```
+
+Códigos de Resposta
+
+| Código HTTP       | Significado                     | Quando ocorre                                                  |
+|-------------------|----------------------------------|----------------------------------------------------------------|
+| 201 Created       | Recurso criado com sucesso      | Quando uma recomendação é criada com êxito |
+| 400 Bad Request   | Requisição malformada           | Quando os dados enviados estão incorretos ou incompletos       |
+| 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
+| 404 Not Found | Recurso não encontrado        |  Quando nenhum usuário foi encontrado com o ID especificado      |
+| 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
+
+- #### Retorna dataset de usuários em JSON através da procedure sp_exportar_dataset_usuarios
+
+```JSON
+GET /api/v2/procedures/exportar/usuarios
+```
+
+Response Body
+```
+{
+  "value": {
+    "success": true,
+    "totalUsuarios": 12,
+    "data": [
       {
-        "id": 8,
-        "nome": "Débora Mendes",
-        "telefone": "11988889999",
-        "cargo": {
-          "nome": "Mecânico",
-          "descricao": "Responsável por realizar reparos e manutenções em motos"
-        }
+        "_id": 1,
+        "id_usuario": 1,
+        "nome_usuario": "maria.silva",
+        "area_atual": "Suporte Técnico",
+        "area_interesse": "DevOps",
+        "objetivo_carreira": "Migrar para área de infraestrutura e automação",
+        "nivel_experiencia": "Júnior",
+        "competencias": [
+          {
+            "nome": "Docker",
+            "categoria": "DevOps"
+          },
+          {
+            "nome": "Git",
+            "categoria": "DevOps"
+          },
+          {
+            "nome": "Comunicação",
+            "categoria": "Soft Skills"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-08",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 7,
+            "nivel_energia": 8,
+            "nivel_estresse": 4
+          },
+          {
+            "data": "2025-11-07",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 8,
+            "nivel_energia": 7,
+            "nivel_estresse": 5
+          },
+          {
+            "data": "2025-11-06",
+            "humor": "Estressado",
+            "horas_sono": 6,
+            "horas_trabalho": 10,
+            "nivel_energia": 5,
+            "nivel_estresse": 8
+          }
+        ]
+      },
+      {
+        "_id": 2,
+        "id_usuario": 2,
+        "nome_usuario": "joao.santos",
+        "area_atual": "Analista de Sistemas",
+        "area_interesse": "Data Science",
+        "objetivo_carreira": "Tornar-me cientista de dados especializado em IA",
+        "nivel_experiencia": "Pleno",
+        "competencias": [
+          {
+            "nome": "Python",
+            "categoria": "Back-end"
+          },
+          {
+            "nome": "SQL",
+            "categoria": "Banco de Dados"
+          },
+          {
+            "nome": "Resolução de Problemas",
+            "categoria": "Soft Skills"
+          },
+          {
+            "nome": "Pandas",
+            "categoria": "Data Science"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-11",
+            "humor": "Estressado",
+            "horas_sono": 5,
+            "horas_trabalho": 11,
+            "nivel_energia": 4,
+            "nivel_estresse": 9
+          },
+          {
+            "data": "2025-11-08",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 8,
+            "nivel_energia": 8,
+            "nivel_estresse": 4
+          },
+          {
+            "data": "2025-11-03",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 9,
+            "nivel_energia": 7,
+            "nivel_estresse": 6
+          }
+        ]
+      },
+      {
+        "_id": 3,
+        "id_usuario": 3,
+        "nome_usuario": "ana.costa",
+        "area_atual": "Designer Gráfico",
+        "area_interesse": "UX/UI",
+        "objetivo_carreira": "Transição para design de experiência do usuário",
+        "nivel_experiencia": "Júnior",
+        "competencias": [
+          {
+            "nome": "Figma",
+            "categoria": "UX/UI"
+          },
+          {
+            "nome": "Comunicação",
+            "categoria": "Soft Skills"
+          },
+          {
+            "nome": "Trabalho em Equipe",
+            "categoria": "Soft Skills"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-12",
+            "humor": "Triste",
+            "horas_sono": 6,
+            "horas_trabalho": 8,
+            "nivel_energia": 5,
+            "nivel_estresse": 7
+          },
+          {
+            "data": "2025-11-09",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 7,
+            "nivel_energia": 7,
+            "nivel_estresse": 5
+          },
+          {
+            "data": "2025-11-05",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 6,
+            "nivel_energia": 9,
+            "nivel_estresse": 3
+          }
+        ]
+      },
+      {
+        "_id": 4,
+        "id_usuario": 4,
+        "nome_usuario": "pedro.oliveira",
+        "area_atual": "Desenvolvedor Junior",
+        "area_interesse": "Back-end",
+        "objetivo_carreira": "Crescer como desenvolvedor backend sênior",
+        "nivel_experiencia": "Júnior",
+        "competencias": [
+          {
+            "nome": "JavaScript",
+            "categoria": "Front-end"
+          },
+          {
+            "nome": "SQL",
+            "categoria": "Banco de Dados"
+          },
+          {
+            "nome": "Git",
+            "categoria": "DevOps"
+          },
+          {
+            "nome": "Node.js",
+            "categoria": "Back-end"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-10",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 7,
+            "nivel_energia": 8,
+            "nivel_estresse": 4
+          },
+          {
+            "data": "2025-11-07",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 8,
+            "nivel_energia": 6,
+            "nivel_estresse": 6
+          },
+          {
+            "data": "2025-11-04",
+            "humor": "Estressado",
+            "horas_sono": 5,
+            "horas_trabalho": 12,
+            "nivel_energia": 3,
+            "nivel_estresse": 9
+          }
+        ]
+      },
+      {
+        "_id": 5,
+        "id_usuario": 5,
+        "nome_usuario": "julia.ferreira",
+        "area_atual": "Estagiária TI",
+        "area_interesse": "Front-end",
+        "objetivo_carreira": "Desenvolver carreira em desenvolvimento web moderno",
+        "nivel_experiencia": "Estagiário",
+        "competencias": [
+          {
+            "nome": "JavaScript",
+            "categoria": "Front-end"
+          },
+          {
+            "nome": "React",
+            "categoria": "Front-end"
+          },
+          {
+            "nome": "TypeScript",
+            "categoria": "Front-end"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-12",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 7,
+            "nivel_energia": 7,
+            "nivel_estresse": 5
+          },
+          {
+            "data": "2025-11-09",
+            "humor": "Estressado",
+            "horas_sono": 6,
+            "horas_trabalho": 9,
+            "nivel_energia": 5,
+            "nivel_estresse": 7
+          },
+          {
+            "data": "2025-11-06",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 6,
+            "nivel_energia": 8,
+            "nivel_estresse": 3
+          }
+        ]
+      },
+      {
+        "_id": 6,
+        "id_usuario": 6,
+        "nome_usuario": "carlos.mendes",
+        "area_atual": "Nenhuma",
+        "area_interesse": "Banco de Dados",
+        "objetivo_carreira": "Iniciar carreira como DBA ou engenheiro de dados",
+        "nivel_experiencia": "Nenhuma",
+        "competencias": [
+          {
+            "nome": "SQL",
+            "categoria": "Banco de Dados"
+          },
+          {
+            "nome": "Resolução de Problemas",
+            "categoria": "Soft Skills"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-08",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 0,
+            "nivel_energia": 9,
+            "nivel_estresse": 2
+          },
+          {
+            "data": "2025-11-03",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 0,
+            "nivel_energia": 8,
+            "nivel_estresse": 2
+          }
+        ]
+      },
+      {
+        "_id": 7,
+        "id_usuario": 7,
+        "nome_usuario": "fernanda.lima",
+        "area_atual": "Gerente de Projetos",
+        "area_interesse": "Governança de TI",
+        "objetivo_carreira": "Especializar-me em governança e compliance de TI",
+        "nivel_experiencia": "Sênior",
+        "competencias": [
+          {
+            "nome": "Comunicação",
+            "categoria": "Soft Skills"
+          },
+          {
+            "nome": "Trabalho em Equipe",
+            "categoria": "Soft Skills"
+          },
+          {
+            "nome": "Resolução de Problemas",
+            "categoria": "Soft Skills"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-10",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 9,
+            "nivel_energia": 7,
+            "nivel_estresse": 6
+          },
+          {
+            "data": "2025-11-05",
+            "humor": "Estressado",
+            "horas_sono": 6,
+            "horas_trabalho": 11,
+            "nivel_energia": 5,
+            "nivel_estresse": 8
+          }
+        ]
+      },
+      {
+        "_id": 8,
+        "id_usuario": 8,
+        "nome_usuario": "ricardo.alves",
+        "area_atual": "Desenvolvedor Full Stack",
+        "area_interesse": "IA",
+        "objetivo_carreira": "Migrar para desenvolvimento de soluções de inteligência artificial",
+        "nivel_experiencia": "Pleno",
+        "competencias": [
+          {
+            "nome": "Python",
+            "categoria": "Back-end"
+          },
+          {
+            "nome": "JavaScript",
+            "categoria": "Front-end"
+          },
+          {
+            "nome": "Machine Learning",
+            "categoria": "IA"
+          },
+          {
+            "nome": "TensorFlow",
+            "categoria": "IA"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-11",
+            "humor": "Estressado",
+            "horas_sono": 5,
+            "horas_trabalho": 10,
+            "nivel_energia": 4,
+            "nivel_estresse": 8
+          },
+          {
+            "data": "2025-11-07",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 8,
+            "nivel_energia": 8,
+            "nivel_estresse": 4
+          }
+        ]
+      },
+      {
+        "_id": 9,
+        "id_usuario": 9,
+        "nome_usuario": "beatriz.rocha",
+        "area_atual": "QA Tester",
+        "area_interesse": "DevOps",
+        "objetivo_carreira": "Automatizar testes e trabalhar com CI/CD",
+        "nivel_experiencia": "Júnior",
+        "competencias": [
+          {
+            "nome": "Git",
+            "categoria": "DevOps"
+          },
+          {
+            "nome": "Trabalho em Equipe",
+            "categoria": "Soft Skills"
+          },
+          {
+            "nome": "Jenkins",
+            "categoria": "DevOps"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-10",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 7,
+            "nivel_energia": 8,
+            "nivel_estresse": 4
+          },
+          {
+            "data": "2025-11-06",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 8,
+            "nivel_energia": 7,
+            "nivel_estresse": 5
+          }
+        ]
+      },
+      {
+        "_id": 10,
+        "id_usuario": 10,
+        "nome_usuario": "lucas.martins",
+        "area_atual": "Analista de Negócios",
+        "area_interesse": "Data Science",
+        "objetivo_carreira": "Combinar análise de negócios com ciência de dados",
+        "nivel_experiencia": "Pleno",
+        "competencias": [
+          {
+            "nome": "SQL",
+            "categoria": "Banco de Dados"
+          },
+          {
+            "nome": "Resolução de Problemas",
+            "categoria": "Soft Skills"
+          },
+          {
+            "nome": "Power BI",
+            "categoria": "Data Science"
+          }
+        ],
+        "registros_bem_estar": [
+          {
+            "data": "2025-11-09",
+            "humor": "Feliz",
+            "horas_sono": 8,
+            "horas_trabalho": 7,
+            "nivel_energia": 9,
+            "nivel_estresse": 3
+          },
+          {
+            "data": "2025-11-04",
+            "humor": "Calmo",
+            "horas_sono": 7,
+            "horas_trabalho": 8,
+            "nivel_energia": 7,
+            "nivel_estresse": 6
+          }
+        ]
+      },
+      {
+        "_id": 11,
+        "id_usuario": 11,
+        "nome_usuario": "camila.souza",
+        "area_atual": "Desenvolvedora Mobile",
+        "area_interesse": "Back-end",
+        "objetivo_carreira": "Expandir conhecimento para desenvolvimento backend",
+        "nivel_experiencia": "Júnior",
+        "competencias": [
+          {
+            "nome": "JavaScript",
+            "categoria": "Front-end"
+          },
+          {
+            "nome": "Git",
+            "categoria": "DevOps"
+          },
+          {
+            "nome": "Comunicação",
+            "categoria": "Soft Skills"
+          }
+        ],
+        "registros_bem_estar": []
+      },
+      {
+        "_id": 12,
+        "id_usuario": 12,
+        "nome_usuario": "rafael.dias",
+        "area_atual": "Freelancer Web",
+        "area_interesse": "Front-end",
+        "objetivo_carreira": "Profissionalizar carreira como desenvolvedor frontend",
+        "nivel_experiencia": "Júnior",
+        "competencias": [
+          {
+            "nome": "JavaScript",
+            "categoria": "Front-end"
+          },
+          {
+            "nome": "React",
+            "categoria": "Front-end"
+          },
+          {
+            "nome": "Git",
+            "categoria": "DevOps"
+          }
+        ],
+        "registros_bem_estar": []
       }
     ],
-    "setores": [
-      {
-        "id": 61,
-        "tipo": "Agendada Para Manutenção",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 190,
-            "numero": "H5-V1",
-            "ocupada": false
-          },
-          {
-            "id": 191,
-            "numero": "H5-V2",
-            "ocupada": false
-          },
-          {
-            "id": 192,
-            "numero": "H5-V3",
-            "ocupada": false
-          }
-        ]
-      },
-      {
-        "id": 59,
-        "tipo": "Danos Estruturais Graves",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 184,
-            "numero": "H3-V1",
-            "ocupada": false
-          },
-          {
-            "id": 185,
-            "numero": "H3-V2",
-            "ocupada": false
-          },
-          {
-            "id": 186,
-            "numero": "H3-V3",
-            "ocupada": false
-          }
-        ]
-      },
-      {
-        "id": 64,
-        "tipo": "Minha Mottu",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 199,
-            "numero": "H8-V1",
-            "ocupada": false
-          },
-          {
-            "id": 200,
-            "numero": "H8-V2",
-            "ocupada": false
-          },
-          {
-            "id": 201,
-            "numero": "H8-V3",
-            "ocupada": false
-          }
-        ]
-      },
-      {
-        "id": 60,
-        "tipo": "Motor Defeituoso",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 187,
-            "numero": "H4-V1",
-            "ocupada": false
-          },
-          {
-            "id": 188,
-            "numero": "H4-V2",
-            "ocupada": false
-          },
-          {
-            "id": 189,
-            "numero": "H4-V3",
-            "ocupada": false
-          }
-        ]
-      },
-      {
-        "id": 57,
-        "tipo": "Pendência",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 178,
-            "numero": "H1-V1",
-            "ocupada": false
-          },
-          {
-            "id": 179,
-            "numero": "H1-V2",
-            "ocupada": false
-          },
-          {
-            "id": 180,
-            "numero": "H1-V3",
-            "ocupada": false
-          }
-        ]
-      },
-      {
-        "id": 62,
-        "tipo": "Pronta para Aluguel",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 193,
-            "numero": "H6-V1",
-            "ocupada": false
-          },
-          {
-            "id": 194,
-            "numero": "H6-V2",
-            "ocupada": false
-          },
-          {
-            "id": 195,
-            "numero": "H6-V3",
-            "ocupada": false
-          }
-        ]
-      },
-      {
-        "id": 58,
-        "tipo": "Reparos Simples",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 181,
-            "numero": "H2-V1",
-            "ocupada": false
-          },
-          {
-            "id": 182,
-            "numero": "H2-V2",
-            "ocupada": false
-          },
-          {
-            "id": 183,
-            "numero": "H2-V3",
-            "ocupada": false
-          }
-        ]
-      },
-      {
-        "id": 63,
-        "tipo": "Sem Placa",
-        "status": "Livre",
-        "capacidade": {
-          "totalVagas": 3,
-          "vagasLivres": 3,
-          "vagasOcupadas": 0,
-          "taxaOcupacao": 0
-        },
-        "vagas": [
-          {
-            "id": 196,
-            "numero": "H7-V1",
-            "ocupada": false
-          },
-          {
-            "id": 197,
-            "numero": "H7-V2",
-            "ocupada": false
-          },
-          {
-            "id": 198,
-            "numero": "H7-V3",
-            "ocupada": false
-          }
-        ]
-      }
-    ],
-    "estatisticas": {
-      "totalSetores": 8,
-      "totalVagas": 24,
-      "vagasOcupadas": 0,
-      "vagasLivres": 24,
-      "taxaOcupacaoGeral": 0,
-      "movimentacoesAtivas": 0
-    }
-  }
-]
+    "timestamp": "2025-11-13T23:23:42.3434677Z"
+  },
+  "statusCode": 200
+}
 ```
 
 Códigos de Resposta
 
 | Código HTTP       | Significado                     | Quando ocorre                                                  |
 |-------------------|----------------------------------|----------------------------------------------------------------|
-| 200 OK    | Requisição bem-sucedida        | Quando os pátios são retornados com sucesso   |
+| 200 OK      | Requisição bem-sucedida      | Quando o dataset é exportado com sucesso |
 | 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
-| 404 Not Found     | Recurso não encontrado         | Quando nenhum pátio é retornado                          |
 | 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
+
