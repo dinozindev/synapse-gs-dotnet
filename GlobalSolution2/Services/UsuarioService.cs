@@ -7,10 +7,12 @@ namespace GlobalSolution2.Services;
 public class UsuarioService
 {
     private readonly AppDbContext _db;
+    private readonly ILogger<UsuarioService> _logger;
 
-    public UsuarioService(AppDbContext db)
+    public UsuarioService(AppDbContext db, ILogger<UsuarioService> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     // retorna todos os usuários com paginação
@@ -50,12 +52,20 @@ public class UsuarioService
     // retorna um usuário por ID
     public async Task<IResult> GetUsuarioByIdAsync(int id)
     {
+        _logger.LogInformation("Buscando usuário com ID {Id}", id);
+
         var usuario = await _db.Usuarios
             .Include(u => u.UsuarioCompetencias)
                 .ThenInclude(uc => uc.Competencia)
             .FirstOrDefaultAsync(u => u.UsuarioId == id);
 
-        if (usuario == null) return Results.NotFound("Usuário não encontrado com ID informado.");
+        if (usuario == null)
+        {
+            _logger.LogWarning("Usuário com ID {Id} não encontrado", id);
+            return Results.NotFound("Usuário não encontrado com ID informado.");
+        }
+
+        _logger.LogInformation("Usuário de ID {Id} encontrado com sucesso", id);
 
         var usuarioDto = UsuarioReadDto.ToDto(usuario);
 
@@ -74,10 +84,17 @@ public class UsuarioService
         return Results.Ok(response);
     }
 
+    // cria um novo usuário
     public async Task<IResult> CreateUsuarioAsync(UsuarioPostDto dto)
     {
+        _logger.LogInformation("Iniciando criação de usuário: {NomeUsuario}", dto.NomeUsuario);
+
         var validation = await ValidateUsuario(dto);
-        if (validation is not null) return validation;
+        if (validation is not null)
+        {
+            _logger.LogWarning("Falha na validação ao criar usuário {NomeUsuario}", dto.NomeUsuario);
+            return validation;
+        }
 
         var usuario = new Usuario
         {
@@ -91,6 +108,8 @@ public class UsuarioService
 
         _db.Usuarios.Add(usuario);
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Usuário criado com sucesso: ID {Id}", usuario.UsuarioId);
 
         var usuarioDto = UsuarioReadDto.ToDto(usuario);
 
@@ -111,11 +130,21 @@ public class UsuarioService
     // atualiza os dados do usuário
     public async Task<IResult> UpdateUsuarioAsync(int id, UsuarioPostDto dto)
     {
+        _logger.LogInformation("Iniciando atualizando de usuário com ID {Id}", id);
+
         var usuarioExistente = await _db.Usuarios.FindAsync(id);
-        if (usuarioExistente is null) return Results.NotFound("Usuário não encontrado com ID informado.");
+        if (usuarioExistente is null)
+        {
+            _logger.LogWarning("Usuário com ID {Id} não encontrado para atualização", id);
+            return Results.NotFound("Usuário não encontrado com ID informado.");
+        } 
 
         var validation = await ValidateUsuario(dto, id);
-        if (validation is not null) return validation;
+        if (validation is not null)
+        {
+            _logger.LogWarning("Falha na validação ao atualizar usuário {NomeUsuario}", dto.NomeUsuario);
+            return validation;
+        } 
 
         usuarioExistente.NomeUsuario = dto.NomeUsuario;
         usuarioExistente.SenhaUsuario = dto.SenhaUsuario;
@@ -125,6 +154,8 @@ public class UsuarioService
         usuarioExistente.NivelExperiencia = dto.NivelExperiencia;
 
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Usuário de ID {Id} atualizado com sucesso", usuarioExistente.UsuarioId);
 
         var usuarioDto = UsuarioReadDto.ToDto(usuarioExistente);
 
@@ -145,26 +176,46 @@ public class UsuarioService
     // deleta um usuário pelo ID
     public async Task<IResult> DeleteUsuarioAsync(int id)
     {
+        _logger.LogInformation("Iniciando remoção de usuário de ID {Id}", id);
+
         var usuario = await _db.Usuarios.FindAsync(id);
-        if (usuario is null) return Results.NotFound("Usuário não encontrado com ID informado.");
+        if (usuario is null)
+        {
+            _logger.LogWarning("Usuário com ID {Id} não encontrado para remoção", id);
+            return Results.NotFound("Usuário não encontrado com ID informado.");
+        } 
 
         _db.Usuarios.Remove(usuario);
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Usuário de ID {Id} excluído com sucesso", id);
+
         return Results.NoContent();
     }
 
     // adicionar associação com Competencia
     public async Task<IResult> AddCompetenciaAoUsuarioAsync(int usuarioId, int competenciaId)
     {
+
+        _logger.LogInformation("Iniciando associação de Competência {CompetenciaId} ao Usuário {UsuarioId}.", competenciaId, usuarioId);
+
         var usuarioExistente = await _db.Usuarios.Where(u => u.UsuarioId == usuarioId).FirstOrDefaultAsync();
         var competenciaExistente = await _db.Competencias.Where(c => c.CompetenciaId == competenciaId).FirstOrDefaultAsync();
 
-        if (usuarioExistente is null || competenciaExistente is null) return Results.NotFound("Usuário e Competência inexistentes.");
+        if (usuarioExistente is null || competenciaExistente is null)
+        {
+            _logger.LogWarning("Usuário {UsuarioId} ou Competência {CompetenciaId} não encontrados.", usuarioId, competenciaId);
+            return Results.NotFound("Usuário e Competência inexistentes.");
+        } 
 
         var existeAssociacao = await _db.UsuarioCompetencias
         .Where(uc => uc.UsuarioId == usuarioId && uc.CompetenciaId == competenciaId).FirstOrDefaultAsync();
 
-        if (existeAssociacao is not null) return Results.Conflict("A associação entre Usuário e Competência já existe.");
+        if (existeAssociacao is not null)
+        {
+            _logger.LogWarning("Associação já existente entre Usuário {UsuarioId} e Competência {CompetenciaId}.", usuarioId, competenciaId);
+            return Results.Conflict("A associação entre Usuário e Competência já existe.");
+        }
 
         var usuarioCompetencia = new UsuarioCompetencia
         {
@@ -175,19 +226,29 @@ public class UsuarioService
         _db.UsuarioCompetencias.Add(usuarioCompetencia);
         await _db.SaveChangesAsync();
 
+        _logger.LogInformation("Associação entre Usuário {UsuarioId} e Competência {CompetenciaId} criada com sucesso.", usuarioId, competenciaId);
+
         return Results.NoContent();
     }
 
     // remover associação com Competencia
     public async Task<IResult> DeleteCompetenciaDeUsuarioAsync(int usuarioId, int competenciaId)
     {
+        _logger.LogInformation("Removendo associação entre Usuário {UsuarioId} e Competência {CompetenciaId}.", usuarioId, competenciaId);
+
         var usuarioCompetencia = await _db.UsuarioCompetencias
         .FirstOrDefaultAsync(uc => uc.UsuarioId == usuarioId && uc.CompetenciaId == competenciaId);
 
-        if (usuarioCompetencia is null) return Results.NotFound("Associação entre Usuário e Competência não encontrada.");
+        if (usuarioCompetencia is null)
+        {
+            _logger.LogWarning("Associação não encontrada para Usuário {UsuarioId} e Competência {CompetenciaId}.", usuarioId, competenciaId);
+            return Results.NotFound("Associação entre Usuário e Competência não encontrada.");
+        }
 
         _db.UsuarioCompetencias.Remove(usuarioCompetencia);
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Associação entre Usuário {UsuarioId} e Competência {CompetenciaId} removida com sucesso.", usuarioId, competenciaId);
 
         return Results.NoContent(); 
     }

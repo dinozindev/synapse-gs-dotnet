@@ -7,12 +7,15 @@ namespace GlobalSolution2.Services;
 public class RegistroBemEstarService
 {
     private readonly AppDbContext _db;
+    private readonly ILogger<RegistroBemEstarService> _logger;
 
-    public RegistroBemEstarService(AppDbContext db)
+    public RegistroBemEstarService(AppDbContext db, ILogger<RegistroBemEstarService> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
+    // retorna todos os registro bem estar com paginação
     public async Task<IResult> GetAllRegistrosBemEstarAsync(int pageNumber = 1, int pageSize = 10)
     {
         var totalCount = await _db.RegistrosBemEstar.CountAsync();
@@ -44,10 +47,18 @@ public class RegistroBemEstarService
         return registrosDto.Count != 0 ? Results.Ok(response) : Results.NoContent();
     }
 
+    // retorna todos os registros bem estar de um usuário
     public async Task<IResult> GetRegistrosDeUsuarioAsync(int usuarioId, int pageNumber = 1, int pageSize = 10)
     {
+
+        _logger.LogInformation("Buscando todos os registros de bem estar do usuário com ID {Id}", usuarioId);
+
         var usuarioExiste = await _db.Usuarios.Where(u => u.UsuarioId == usuarioId).FirstOrDefaultAsync();
-        if (usuarioExiste is null) return Results.NotFound($"Nenhum usuário encontrado com o ID {usuarioId}.");
+        if (usuarioExiste is null)
+        {
+            _logger.LogWarning("Usuário com ID {Id} não encontrado", usuarioId);
+            return Results.NotFound($"Nenhum usuário encontrado com o ID {usuarioId}.");
+        } 
 
         var totalCount = await _db.RegistrosBemEstar
             .Where(r => r.UsuarioId == usuarioId)
@@ -81,10 +92,20 @@ public class RegistroBemEstarService
         return registrosDto.Count != 0 ? Results.Ok(response) : Results.NoContent();
     }
 
+    // retorna um Registro bem estar pelo ID
     public async Task<IResult> GetRegistroBemEstarByIdAsync(int id)
     {
+        _logger.LogInformation("Buscando Registro de Bem Estar com ID {Id}", id);
+
         var registro = await _db.RegistrosBemEstar.Include(r => r.Usuario).FirstOrDefaultAsync(r => r.RegistroId == id);
-        if (registro is null) return Results.NotFound("Registro de Bem Estar não encontrado com ID informado.");
+
+        if (registro is null)
+        {
+            _logger.LogWarning("Registro de Bem Estar com ID {Id} não encontrado", id);
+            return Results.NotFound("Registro de Bem Estar não encontrado com ID informado.");
+        }
+
+        _logger.LogInformation("Registro de Bem Estar de ID {Id} encontrado com sucesso", id);
 
         var registroDto = RegistroBemEstarReadDto.ToDto(registro);
 
@@ -102,13 +123,24 @@ public class RegistroBemEstarService
         return Results.Ok(response);
     }
 
+    // cria um novo registro bem estar
     public async Task<IResult> CreateRegistroBemEstarAsync(RegistroBemEstarPostDto dto)
     {
+        _logger.LogInformation("Iniciando criação de Registro de Bem Estar do Usuário de ID {Id}", dto.UsuarioId);
+
         var validation = await ValidateRegistroPost(dto);
-        if (validation is not null) return validation;
+        if (validation is not null)
+        {
+            _logger.LogWarning("Falha na validação ao criar um registro para o Usuário de ID {Id}", dto.UsuarioId);
+            return validation;
+        }
 
         var usuario = await _db.Usuarios.FirstOrDefaultAsync(u => u.UsuarioId == dto.UsuarioId);
-        if (usuario is null) return Results.NotFound("Usuário com ID fornecido não encontrado.");
+        if (usuario is null)
+        {
+            _logger.LogWarning("Usuário com ID {Id} não encontrado", dto.UsuarioId);
+            return Results.NotFound("Usuário com ID fornecido não encontrado.");
+        }
 
         var registro = new RegistroBemEstar
         {
@@ -125,6 +157,8 @@ public class RegistroBemEstarService
         _db.RegistrosBemEstar.Add(registro);
         await _db.SaveChangesAsync();
 
+        _logger.LogInformation("Registro de Bem Estar de ID {Id} cadastrado com sucesso", registro.RegistroId);
+
         var registroDto = RegistroBemEstarReadDto.ToDto(registro);
 
         var response = new ResourceResponse<RegistroBemEstarReadDto>(
@@ -140,15 +174,25 @@ public class RegistroBemEstarService
         return Results.Created($"/registros-bem-estar/{registroDto.RegistroId}", response);
     }
 
+    // atualiza um registro bem estar
     public async Task<IResult> UpdateRegistroBemEstarAsync(int id, RegistroBemEstarPutDto dto)
     {
+        _logger.LogInformation("Iniciando atualização de registro de ID {Id}", id);
         var registroExistente = await _db.RegistrosBemEstar
         .Include(r => r.Usuario)
         .FirstOrDefaultAsync(r => r.RegistroId == id);
-        if (registroExistente is null) return Results.NotFound("Registro não encontrado com ID informado.");
+        if (registroExistente is null)
+        {
+            _logger.LogInformation("Registro de ID {Id} não encontrado", id);
+            return Results.NotFound("Registro não encontrado com ID informado.");
+        }
 
         var validation = await ValidateRegistroPut(dto);
-        if (validation is not null) return validation;
+        if (validation is not null)
+        {
+            _logger.LogWarning("Falha na validação ao atualizar o registro de ID {Id}", id);
+            return validation;
+        }
 
         registroExistente.HumorRegistro = dto.HumorRegistro;
         registroExistente.HorasSono = dto.HorasSono;
@@ -157,6 +201,8 @@ public class RegistroBemEstarService
         registroExistente.NivelEstresse = dto.NivelEstresse;
 
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Registro de Bem Estar de ID {Id} atualizado com sucesso", id);
 
         var registroDto = RegistroBemEstarReadDto.ToDto(registroExistente);
 
@@ -173,13 +219,22 @@ public class RegistroBemEstarService
         return Results.Ok(response);
     }
 
+    // remove um registro bem estar
     public async Task<IResult> DeleteRegistroBemEstarAsync(int id)
     {
+        _logger.LogInformation("Iniciando remoção de registro de ID {Id}", id);
         var registro = await _db.RegistrosBemEstar.FindAsync(id);
-        if (registro is null) return Results.NotFound("Registro de Bem Estar não encontrado com ID informado.");
+        if (registro is null)
+        {
+            _logger.LogWarning("Registro de Bem Estar de ID {Id} não encontrado", id);
+            return Results.NotFound("Registro de Bem Estar não encontrado com ID informado.");
+        } 
 
         _db.RegistrosBemEstar.Remove(registro);
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Registro de Bem Estar de ID {Id} removido com sucesso", id);
+
         return Results.NoContent();
     }
 
