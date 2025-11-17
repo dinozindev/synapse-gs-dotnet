@@ -14,7 +14,7 @@ public static class CompetenciaEndpoints
         .WithApiVersionSet(versionSet)
         .WithTags("Competências");
 
-        competencias.MapGet("/", async ([Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, CompetenciaService service) => await service.GetAllCompetenciasAsync())
+        competencias.MapGet("/", async ([Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, CompetenciaService service) => await service.GetAllCompetenciasAsync(pageNumber, pageSize))
         .WithSummary("Retorna todas as competências cadastradas (paginação) (V1)")
         .WithDescription("Este endpoint retorna a lista de todas as Competências, paginadas de acordo com os parâmetros **pageNumber** e **pageSize**.")
         .MapToApiVersion(1, 0)
@@ -57,7 +57,7 @@ public static class CompetenciaEndpoints
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status500InternalServerError);
         
-        competencias.MapGet("/", async ([Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, CompetenciaService service) => await service.GetAllCompetenciasAsync())
+        competencias.MapGet("/", async ([Description("O número da página atual (ex: 1)")] int pageNumber, [Description("A quantidade de registros por página (ex: 10)")] int pageSize, CompetenciaService service) => await service.GetAllCompetenciasAsync(pageNumber, pageSize))
         .WithSummary("Retorna todas as competências cadastradas (paginação) (V2)")
         .WithDescription("Este endpoint retorna a lista de todas as Competências, paginadas de acordo com os parâmetros **pageNumber** e **pageSize**.")
         .MapToApiVersion(2, 0)
