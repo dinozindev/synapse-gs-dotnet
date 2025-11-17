@@ -8,7 +8,11 @@
 
 ## Descrição do Projeto
 
+O Synapse é uma plataforma inteligente voltada para orientação profissional e bem-estar. O usuário — esteja trabalhando, estudando ou em transição — informa sua área atual, sua área de interesse dentro do universo de desenvolvimento (como Front-end, Back-end, DevOps, IA, entre outras) e suas competências. Com esses dados, o sistema utiliza uma API de Inteligência Artificial para recomendar vagas, cursos e oportunidades de capacitação alinhados ao perfil e aos objetivos do usuário.
 
+Além disso, o Synapse oferece um módulo de bem-estar, onde o usuário pode registrar diariamente informações como horas de sono, horas de trabalho, nível de estresse, nível de energia e humor. A plataforma envia esse histórico para a IA, que analisa padrões e fornece insights e sugestões personalizadas para melhorar a saúde e o equilíbrio do usuário.
+
+Em resumo, o Synapse combina orientação profissional e gestão de bem-estar em um único ambiente, usando IA para oferecer recomendações realmente úteis, tanto para a carreira quanto para a qualidade de vida.
 
 ## Justificativa da Arquitetura
 
@@ -16,7 +20,7 @@ Optamos por utilizar **ASP.NET Core com Minimal APIs** pela simplicidade na defi
 
 A separação em **camadas (Models, DTOs, Services, Examples e Endpoints)** garante melhor manutenção e testabilidade do código.  
 
-A escolha do **Entity Framework Core** com banco Oracle se deu por facilitar o mapeamento objeto-relacional, reduzindo código de SQL manual.  
+A escolha do **Entity Framework Core** com banco Oracle se deu por facilitar o mapeamento objeto-relacional, reduzindo código de SQL manual. 
 
 ## Instalação
 
@@ -2397,4 +2401,5 @@ Códigos de Resposta
 | 200 OK      | Requisição bem-sucedida      | Quando o dataset é exportado com sucesso |
 | 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
 | 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
+
 
