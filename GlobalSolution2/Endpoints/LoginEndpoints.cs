@@ -13,11 +13,32 @@ public static class LoginEndpoints
             .WithApiVersionSet(apiVersionSet)
             .WithTags("Auth");
 
+        group.MapPost("/login", (LoginRequestDto request, AuthService authService) =>
+        {
+            var result = authService.Login(request.NomeUsuario, request.SenhaUsuario);
+
+            if (!result.Success)
+                return Results.Unauthorized();
+
+            return Results.Ok(new
+            {
+                message = "Login realizado com sucesso!",
+                usuario = request.NomeUsuario
+            });
+        })
+        .MapToApiVersion(1.0)
+        .WithName("Faz login e retorna usuário (V1)")
+        .WithSummary("Login simples sem JWT (V1)")
+        .Produces<LoginV1ResponseDto>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Accepts<LoginRequestDto>("application/json")
+        .AllowAnonymous();
+
         group.MapPost("/login", HandleLogin)
             .WithName("LoginV2")
             .WithSummary("Faz login e retorna um token JWT (V2)")
             .WithDescription("Autentica um usuário e retorna um token JWT válido por 1 hora")
-            .MapToApiVersion(2,0)
+            .MapToApiVersion(2, 0)
             .Produces<LoginResponseDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Accepts<LoginRequestDto>("application/json")
@@ -26,7 +47,7 @@ public static class LoginEndpoints
         group.MapPost("/refresh-token", HandleRefreshToken)
             .WithName("RefreshTokenV2")
             .WithSummary("Renova um token JWT expirado (V2)")
-            .MapToApiVersion(2,0)
+            .MapToApiVersion(2, 0)
             .Produces<LoginResponseDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .RequireRateLimiting("login")
@@ -72,18 +93,18 @@ public static class LoginEndpoints
     }
 
     private static IResult HandleRefreshToken(
-        HttpContext context, 
-        JwtTokenService jwtService, 
+        HttpContext context,
+        JwtTokenService jwtService,
         ILogger<AuthService> logger)
     {
         try
         {
             var username = context.User.FindFirst(ClaimTypes.Name)?.Value;
-        
+
             if (string.IsNullOrEmpty(username))
                 return Results.Unauthorized();
 
-            var newToken = jwtService.GenerateToken(username, 
+            var newToken = jwtService.GenerateToken(username,
                 context.User.FindFirst(ClaimTypes.Role)?.Value ?? "user");
 
             return Results.Ok(new LoginResponseDto

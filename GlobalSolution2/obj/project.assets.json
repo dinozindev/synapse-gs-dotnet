@@ -10314,11 +10314,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\GlobalSolution2.csproj",
+      "projectUniqueName": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\GlobalSolution2.csproj",
       "projectName": "GlobalSolution2",
-      "projectPath": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\GlobalSolution2.csproj",
+      "projectPath": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\GlobalSolution2.csproj",
       "packagesPath": "C:\\Users\\pugpl\\.nuget\\packages\\",
-      "outputPath": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\obj\\",
+      "outputPath": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pugpl\\AppData\\Roaming\\NuGet\\NuGet.Config",

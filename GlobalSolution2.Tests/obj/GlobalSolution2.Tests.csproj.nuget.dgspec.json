@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Aulas\\GlobalSolution2\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj": {}
+    "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj": {}
   },
   "projects": {
-    "D:\\Aulas\\GlobalSolution2\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj": {
+    "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj",
         "projectName": "GlobalSolution2.Tests",
-        "projectPath": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj",
+        "projectPath": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2.Tests\\GlobalSolution2.Tests.csproj",
         "packagesPath": "C:\\Users\\pugpl\\.nuget\\packages\\",
-        "outputPath": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2.Tests\\obj\\",
+        "outputPath": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pugpl\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -29,8 +29,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\GlobalSolution2.csproj": {
-                "projectPath": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\GlobalSolution2.csproj"
+              "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\GlobalSolution2.csproj": {
+                "projectPath": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\GlobalSolution2.csproj"
               }
             }
           }
@@ -104,14 +104,14 @@
         }
       }
     },
-    "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\GlobalSolution2.csproj": {
+    "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\GlobalSolution2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\GlobalSolution2.csproj",
+        "projectUniqueName": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\GlobalSolution2.csproj",
         "projectName": "GlobalSolution2",
-        "projectPath": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\GlobalSolution2.csproj",
+        "projectPath": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\GlobalSolution2.csproj",
         "packagesPath": "C:\\Users\\pugpl\\.nuget\\packages\\",
-        "outputPath": "D:\\Aulas\\GlobalSolution2\\GlobalSolution2\\obj\\",
+        "outputPath": "C:\\Users\\pugpl\\synapse-gs-dotnet\\GlobalSolution2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pugpl\\AppData\\Roaming\\NuGet\\NuGet.Config",
