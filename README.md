@@ -22,6 +22,10 @@ A separação em **camadas (Models, DTOs, Services, Examples e Endpoints)** gara
 
 A escolha do **Entity Framework Core** com banco Oracle se deu por facilitar o mapeamento objeto-relacional, reduzindo código de SQL manual. 
 
+## Diagrama da Arquitetura
+
+![AppScreenshot](https://imgur.com/aLa4y1J.png)
+
 ## Instalação
 
 ### Instalação e Execução da API (.NET 9)
@@ -41,7 +45,7 @@ Antes de instalar, verifique se os seguintes itens estão instalados:
 ### Clone o repositório e acesse o diretório:
 
 ```bash
-git clone https://github.com/dinozindev/synapse-gs-dotnet
+git clone https://github.com/dinozindev/synapse-gs-dotnet.git
 cd synapse-gs-dotnet
 ```
 
@@ -2401,5 +2405,6 @@ Códigos de Resposta
 | 200 OK      | Requisição bem-sucedida      | Quando o dataset é exportado com sucesso |
 | 401 Unauthorized      | Requisição sem autorização         | Quando o Token JWT não foi informado                            |
 | 500 Internal Server Error | Erro interno             | Quando ocorre uma falha inesperada no servidor                 |
+
 
 
