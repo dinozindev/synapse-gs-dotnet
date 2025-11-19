@@ -150,6 +150,7 @@ public class RegistroBemEstarService
             HorasTrabalho = dto.HorasTrabalho,
             NivelEnergia = dto.NivelEnergia,
             NivelEstresse = dto.NivelEstresse,
+            ObservacaoRegistro = dto.ObservacaoRegistro,
             UsuarioId = dto.UsuarioId,
             Usuario = usuario
         };
@@ -199,6 +200,7 @@ public class RegistroBemEstarService
         registroExistente.HorasTrabalho = dto.HorasTrabalho;
         registroExistente.NivelEnergia = dto.NivelEnergia;
         registroExistente.NivelEstresse = dto.NivelEstresse;
+        registroExistente.ObservacaoRegistro = dto.ObservacaoRegistro;
 
         await _db.SaveChangesAsync();
 
@@ -263,8 +265,6 @@ public class RegistroBemEstarService
 
         return null;
     }
-
-
 
     private async Task<IResult?> ValidateRegistroPut(RegistroBemEstarPutDto dto)
     {
